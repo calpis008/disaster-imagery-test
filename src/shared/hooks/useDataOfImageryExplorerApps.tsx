@@ -25,6 +25,9 @@ const getAppUrl = (appName: AppName, pathname: string): string => {
     return pathname;
 };
 
+const LIVING_ATLAS_SENTINEL2_URL =
+    'https://livingatlas.arcgis.com/sentinel2explorer/';
+
 export const useDataOfImageryExplorerApps = (): ImageryExplorerAppInfo[] => {
     return [
         {
@@ -42,8 +45,8 @@ export const useDataOfImageryExplorerApps = (): ImageryExplorerAppInfo[] => {
         {
             appName: 'sentinel2explorer',
             title: 'Sentinel-2',
-            url: getAppUrl('sentinel2explorer', config.sentinel2explorer.pathname),
-            tooltip: '切換至 Sentinel-2 Explorer',
+            url: LIVING_ATLAS_SENTINEL2_URL,
+            tooltip: '開啟 Esri Living Atlas Sentinel-2 Explorer',
         },
     ];
 };

@@ -80,8 +80,11 @@ const AppHeader: FC<Props> = ({ showDocButton, docButtonTooltip }) => {
         const key: UrlHashParamKey = 'mapCenter';
         const hash = `#${key}=${encodeMapCenter(mapCenter, zoom)}`;
 
-        if (url.startsWith('http')) {
-            // Dev: absolute localhost URL — navigate directly
+        if (url.startsWith('http') && !url.includes('localhost')) {
+            // External URL (e.g. Living Atlas) — open in new tab with map center
+            window.open(url + hash, '_blank');
+        } else if (url.startsWith('http')) {
+            // Dev: localhost URL — navigate in same tab
             window.location.href = url + hash;
         } else {
             // Prod: relative pathname — compute base from current app directory

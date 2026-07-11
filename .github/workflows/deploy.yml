@@ -50,18 +50,6 @@ jobs:
       - name: Build FS8 Explorer
         run: npm run build:fs8
 
-      # ── Sentinel-2 build (ArcGIS Online auth, no enterprise portal) ────
-      - name: Create .env.sentinel2 for Sentinel-2
-        run: |
-          {
-            echo "SENTINEL2_EXPLORER_APP_ID = aSCMksIWuDEeRfu7"
-            echo "SENTINEL2_PROXY_SERVICE_URL = "
-            echo "SENTINEL2_ORIGINAL_SERVICE_URL = https://sentinel.imagery1.arcgis.com/arcgis/rest/services/Sentinel2L2A/ImageServer"
-          } > .env.sentinel2
-
-      - name: Build Sentinel-2 Explorer
-        run: npm run build:sentinel2
-
       # ── Assemble and deploy ─────────────────────────────────────────────
       - name: Create root redirect page
         run: |
