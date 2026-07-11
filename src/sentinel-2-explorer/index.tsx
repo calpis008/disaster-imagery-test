@@ -23,8 +23,8 @@ import { ErrorPage } from '@shared/components/ErrorPage';
 import { getSentinel2ExplorerStore } from './store';
 import Map from './components/Map/Map';
 import Layout from './components/Layout/Layout';
-import { initEsriOAuth } from '@shared/utils/esri-oauth';
-import { AGOL_PORTAL_ROOT, SENTINEL2_EXPLORER_APP_ID } from '@shared/config';
+import { isAnonymouns, signIn } from '@shared/utils/esri-oauth';
+import { SENTINEL2_EXPLORER_APP_ID } from '@shared/config';
 import { AboutSentinel2Explorer } from './components/About';
 import '@shared/components/calcite-components';
 import { initializeApp } from '@shared/utils/initialize-app/initializeApp';
@@ -36,6 +36,12 @@ import { initializeApp } from '@shared/utils/initialize-app/initializeApp';
         await initializeApp({
             appId: SENTINEL2_EXPLORER_APP_ID,
         });
+
+        // Sentinel-2 service requires a token — redirect to OAuth if not signed in
+        if (SENTINEL2_EXPLORER_APP_ID && isAnonymouns()) {
+            await signIn();
+            return;
+        }
 
         const store = await getSentinel2ExplorerStore();
 

@@ -22,6 +22,7 @@ import Point from '@arcgis/core/geometry/Point';
 import { getFeatureByObjectId } from '../helpers/getFeatureById';
 import { getExtentByObjectId } from '../helpers/getExtentById';
 import { intersectWithImageryScene } from '../helpers/intersectWithImageryScene';
+import { getToken } from '@shared/utils/esri-oauth';
 
 type GetSentinel1ScenesParams = {
     /**
@@ -52,6 +53,10 @@ type GetSentinel1ScenesParams = {
      * abortController that will be used to cancel the unfinished requests
      */
     abortController: AbortController;
+    /**
+     * optional ArcGIS Online token for authenticated access to the service
+     */
+    token?: string;
 };
 
 // let controller:AbortController = null;
@@ -151,6 +156,7 @@ export const getSentinel2Scenes = async ({
     acquisitionMonth,
     acquisitionDate,
     abortController,
+    token,
 }: GetSentinel1ScenesParams): Promise<Sentinel2Scene[]> => {
     const whereClauses = [`(${CATEGORY} = 1)`];
 
@@ -209,6 +215,10 @@ export const getSentinel2Scenes = async ({
         geometry,
         where: whereClauses.join(` AND `),
     });
+
+    if (token) {
+        params.set('token', token);
+    }
 
     const res = await fetch(
         `${SENTINEL_2_SERVICE_URL}/query?${params.toString()}`,
@@ -271,7 +281,8 @@ export const getSentinel2FeatureByObjectId = async (
 ): Promise<IFeature> => {
     const feature = await getFeatureByObjectId(
         SENTINEL_2_SERVICE_URL,
-        objectId
+        objectId,
+        { token: getToken() }
     );
     return feature;
 };
@@ -287,6 +298,7 @@ export const getExtentOfSentinel2SceneByObjectId = async (
     const extent = await getExtentByObjectId({
         serviceUrl: SENTINEL_2_SERVICE_URL,
         objectId,
+        token: getToken(),
     });
     return extent;
 };

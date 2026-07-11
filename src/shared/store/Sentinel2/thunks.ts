@@ -26,6 +26,7 @@ import { selectQueryParams4SceneInSelectedMode } from '../ImageryScene/selectors
 import { deduplicateListOfImageryScenes } from '@shared/services/helpers/deduplicateListOfScenes';
 import { getSentinel2Scenes } from '@shared/services/sentinel-2/getSentinel2Scenes';
 import { convertSentinel2SceneToImageryScene } from '@shared/services/sentinel-2/helpers';
+import { getToken } from '@shared/utils/esri-oauth';
 
 let abortController: AbortController = null;
 
@@ -58,6 +59,7 @@ export const queryAvailableSentinel2Scenes =
                 acquisitionDateRange,
                 mapPoint: center,
                 abortController,
+                token: getToken(),
             });
 
             // convert list of Landsat scenes to list of imagery scenes
