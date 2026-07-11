@@ -1,10 +1,6 @@
 import React, { FC } from 'react';
 import { APP_NAME } from '@shared/config';
 import { useDataOfImageryExplorerApps } from '@shared/hooks/useDataOfImageryExplorerApps';
-import logoUrl from '../../../../logo.png';
-
-const LIVING_ATLAS_SENTINEL2_URL =
-    'https://livingatlas.arcgis.com/sentinel2explorer/';
 
 const AgencyHeader: FC = () => {
     const apps = useDataOfImageryExplorerApps();
@@ -26,36 +22,17 @@ const AgencyHeader: FC = () => {
 
     return (
         <div
-            className="absolute top-0 left-0 right-0 z-30 flex items-center gap-3 px-4"
+            className="absolute top-0 left-0 right-0 z-30 flex items-center px-4"
             style={{
                 height: '60px',
                 background: '#0f1e28',
                 borderBottom: '2px solid #1e3a4e',
                 fontFamily:
                     '"Microsoft JhengHei","Noto Sans TC","Avenir Next",sans-serif',
+                flexShrink: 0,
             }}
         >
-            <div
-                className="flex-shrink-0 flex items-center justify-center rounded-full overflow-hidden"
-                style={{
-                    width: '42px',
-                    height: '42px',
-                    border: '2px solid #ffffff',
-                }}
-            >
-                <img
-                    src={logoUrl}
-                    alt="航測及遙測分署"
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        filter: 'brightness(0) invert(1)',
-                    }}
-                />
-            </div>
-
-            <div className="flex-grow min-w-0">
+            <div className="flex-grow min-w-0 mr-4">
                 <div
                     style={{
                         fontSize: '15px',
@@ -73,7 +50,7 @@ const AgencyHeader: FC = () => {
                     style={{
                         fontSize: '10px',
                         color: 'rgba(255,255,255,0.6)',
-                        marginTop: '1px',
+                        marginTop: '2px',
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
@@ -84,16 +61,15 @@ const AgencyHeader: FC = () => {
                 </div>
             </div>
 
-            <nav className="flex gap-1 flex-shrink-0">
+            <nav style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
                 {apps.map((app) => {
                     const isActive = app.appName === APP_NAME;
-                    const isSentinel =
-                        app.url === LIVING_ATLAS_SENTINEL2_URL ||
-                        app.appName === 'sentinel2explorer';
                     return (
                         <button
                             key={app.appName}
-                            onClick={() => navigate(app.url)}
+                            onClick={() => {
+                                if (!isActive) navigate(app.url);
+                            }}
                             style={{
                                 padding: '6px 14px',
                                 color: '#ffffff',
@@ -110,7 +86,6 @@ const AgencyHeader: FC = () => {
                             title={app.tooltip}
                         >
                             {app.title}
-                            {isSentinel && !isActive ? ' ↗' : ''}
                         </button>
                     );
                 })}
