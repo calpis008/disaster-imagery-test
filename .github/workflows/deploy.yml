@@ -1,0 +1,48 @@
+name: Deploy Unified Explorer to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create .env file
+        run: |
+          cat > .env <<EOF
+          DMC_EXPLORER_APP_ID = ${{ secrets.DMC_EXPLORER_APP_ID }}
+          DMC_SERVICE_URL = ${{ secrets.DMC_SERVICE_URL }}
+          FS8_EXPLORER_APP_ID = ${{ secrets.FS8_EXPLORER_APP_ID }}
+          FS8_SERVICE_URL = ${{ secrets.FS8_SERVICE_URL }}
+          ARCGIS_PORTAL_ROOT_URL = ${{ secrets.ARCGIS_PORTAL_ROOT_URL }}
+          SENTINEL2_ORIGINAL_SERVICE_URL = https://sentinel.imagery1.arcgis.com/arcgis/rest/services/Sentinel2L2A/ImageServer
+          EOF
+
+      - name: Build Unified Explorer
+        run: npm run build:unified
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist/unifiedexplorer
+          force_orphan: true

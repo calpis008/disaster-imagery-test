@@ -1,0 +1,70 @@
+/* @import 'https://js.arcgis.com/5.0.18/@arcgis/core/assets/esri/themes/dark/main.css'; */
+/* @import url('@esri/calcite-components/dist/calcite/calcite.css'); */
+@import './variables.css';
+@import './global.css';
+@import './fancy-scrollbar.css';
+
+/**
+ * This injects Tailwind's base styles and any base styles registered by
+ * plugins.
+ */
+@tailwind base;
+
+/**
+ * This injects Tailwind's component classes and any component classes
+ * registered by plugins.
+ */
+@tailwind components;
+
+/**
+ * This injects Tailwind's utility classes and any utility classes registered
+ * by plugins.
+ */
+@tailwind utilities;
+
+@layer utilities {
+    .overflow-y-unset {
+        overflow-y: unset;
+    }
+
+    .is-disabled {
+        @apply opacity-50 pointer-events-none;
+    }
+
+    .analyze-tool-and-scene-info-container {
+        @apply w-analysis-tool-container-width mx-10 3xl:mx-16;
+    }
+
+    .analyze-tool-without-scene-info-container {
+        @apply w-[520px] mx-10 3xl:mx-16;
+    }
+}
+
+/* #root .esri-view-root {
+    --esri-view-outline: 0;
+} */
+
+/* Prevent user interaction and visually indicate disabled state when animation mode is active */
+.disabled-when-animation-mode-is-on {
+    @apply pointer-events-none opacity-40;
+}
+
+/* Custom styles to override Calcite components' default styles to fit our theme */
+.calcite-theme-override {
+    --calcite-color-foreground-1: var(--custom-background);
+    --calcite-color-foreground-2: var(--custom-background);
+    --calcite-color-foreground-3: var(--custom-background);
+    --calcite-color-foreground-4: var(--custom-background);
+
+    --calcite-color-text-1: var(--custom-light-blue);
+    --calcite-color-text-2: var(--custom-light-blue);
+    --calcite-color-text-3: var(--custom-light-blue);
+
+    --calcite-color-border-3: var(--custom-light-blue-50);
+}
+
+button:focus-visible,
+div[role='button']:focus-visible {
+    outline: 2px solid #0079c1;
+    outline-offset: 2px;
+}

@@ -1,0 +1,153 @@
+/* Copyright 2025 Esri
+ *
+ * Licensed under the Apache License Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Name of the imagery explore app to start/build that defined in Webpack via DefinePlugin.
+ */
+declare const WEBPACK_DEFINED_APP_NAME: string;
+
+/**
+ * Application ID for the Landsat Explorer app.
+ * Required for authentication and features such as saving selected scenes.
+ */
+declare const ENV_LANDSAT_EXPLORER_APP_ID: string;
+
+/**
+ * The original service URL for Landsat Level 2 imagery service.
+ * Optional: defaults to https://landsat.imagery1.arcgis.com/arcgis/rest/services/LandsatC2L2/ImageServer if not specified.
+ */
+declare const ENV_LANDSAT_LEVEL_2_ORIGINAL_SERVICE_URL: string;
+
+/**
+ * The proxy service URL for Landsat Level 2 imagery service.
+ */
+declare const ENV_LANDSAT_LEVEL_2_PROXY_SERVICE_URL: string;
+
+/**
+ * Application ID for the Sentinel-2 Explorer app.
+ */
+declare const ENV_SENTINEL2_EXPLORER_APP_ID: string;
+
+/**
+ * The proxy service URL for Sentinel-2 imagery service.
+ */
+declare const ENV_SENTINEL2_PROXY_SERVICE_URL: string;
+
+/**
+ * The original service URL for Sentinel-2 imagery service.
+ * Optional: defaults to https://sentinel.imagery1.arcgis.com/arcgis/rest/services/Sentinel2L2A/ImageServer if not specified.
+ */
+declare const ENV_SENTINEL2_ORIGINAL_SERVICE_URL: string;
+
+/**
+ * Application ID for the Sentinel-1 Explorer app.
+ */
+declare const ENV_SENTINEL1_EXPLORER_APP_ID: string;
+
+/**
+ * The proxy service URL for Sentinel-1 imagery service.
+ */
+declare const ENV_SENTINEL1_PROXY_SERVICE_URL: string;
+
+/**
+ * The original service URL for Sentinel-1 imagery service.
+ * Optional: defaults to https://sentinel.imagery1.arcgis.com/arcgis/rest/services/Sentinel1GRD/ImageServer if not specified.
+ */
+declare const ENV_SENTINEL1_ORIGINAL_SERVICE_URL: string;
+
+/**
+ * The Portal root URL for ArcGIS Online or ArcGIS Enterprise.
+ * Optional: defaults to https://www.arcgis.com if not specified.
+ */
+declare const ENV_ARCGIS_PORTAL_ROOT_URL: string;
+
+/**
+ * Raster Analysis GP server root URL.
+ * Optional: defaults to https://rasteranalysis.arcgis.com/arcgis/rest/services/RasterAnalysisTools/GPServer.
+ */
+declare const ENV_RASTER_ANALYSIS_ROOT_URL: string;
+
+/**
+ * Application ID for the Land Cover Explorer app.
+ * Required for authentication and features such as saving web maps.
+ */
+declare const ENV_LANDCOVER_EXPLORER_APP_ID: string;
+
+/**
+ * The service URL for Sentinel-2 Land Cover imagery service.
+ * Optional: defaults to https://ic.imagery1.arcgis.com/arcgis/rest/services/Sentinel2_10m_LandCover/ImageServer if not specified.
+ */
+declare const ENV_SENTINEL2_LANDCOVER_SERVICE_URL: string;
+
+/**
+ * The service URL for Sentinel-2 Land Cover statistics service.
+ * Optional: defaults to https://ic.imagery1.arcgis.com/arcgis/rest/services/Sentinel2_10m_LandCover_Statistics/ImageServer if not specified.
+ */
+declare const ENV_SENTINEL2_LANDCOVER_STATISTICS_SERVICE_URL: string;
+
+/**
+ * Application ID for the NLCD Land Cover Explorer app.
+ * Required for authentication and features such as saving web maps.
+ */
+declare const ENV_NLCD_LANDCOVER_EXPLORER_APP_ID: string;
+
+/**
+ * The service URL for NLCD Land Cover imagery service.
+ * Optional: defaults to https://ic.imagery1.arcgis.com/arcgis/rest/services/NLCD_LandCover/ImageServer if not specified.
+ */
+declare const ENV_NLCD_LANDCOVER_SERVICE_URL: string;
+
+/**
+ * Web Map ID for the Imagery Explorer apps defined in the .env file.
+ * Optional: defaults to f8770e0adc5c41038026494b871ceb99 if not specified.
+ */
+declare const ENV_WEB_MAP_ID: string;
+
+/**
+ * Application ID for the LANDSAT SURFACE TEMP EXPLORER app.
+ * Required for authentication and features such running SIHUI analysis.
+ */
+declare const ENV_SUREFACE_TEMP_EXPLORER_APP_ID: string;
+
+/**
+ * Application ID for the Disaster Imagery Explorer app.
+ * Required for authentication and features such as saving web maps.
+ */
+declare const ENV_DISASTER_IMAGERY_EXPLORER_APP_ID: string;
+
+/**
+ * The service URL for the disaster response service for Disaster Imagery Explorer app.
+ */
+declare const ENV_DISASTER_RESPONSE_SERVICE_URL: string;
+
+/**
+ * Application ID for the DMC Explorer app.
+ */
+declare const ENV_DMC_EXPLORER_APP_ID: string;
+
+/**
+ * The service URL for DMC III ImageServer.
+ */
+declare const ENV_DMC_SERVICE_URL: string;
+
+/**
+ * Application ID for the FS-8 (FORMOSAT-8) Explorer app.
+ */
+declare const ENV_FS8_EXPLORER_APP_ID: string;
+
+/**
+ * The service URL for FORMOSAT-8 ImageServer.
+ */
+declare const ENV_FS8_SERVICE_URL: string;

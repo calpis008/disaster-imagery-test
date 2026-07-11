@@ -1,0 +1,166 @@
+/* Copyright 2025 Esri
+ *
+ * Licensed under the Apache License Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import ImageElement from '@arcgis/core/layers/support/ImageElement';
+// import { appConfig } from '@shared/config';
+// import { QueryParams4ImageryScene } from '@shared/store/ImageryScene/reducer';
+import {
+    selectMapCenter,
+    selectShowBasemap,
+    selectShowMapLabel,
+    selectShowTerrain,
+} from '@shared/store/Map/selectors';
+import React, { FC, useEffect, useMemo, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@shared/store/configureStore';
+// import { AnimationFrameData4DownloadJob } from '@shared/components/AnimationDownloadPanel/DownloadPanel';
+// import { getAvailableYears } from '@shared/services/sentinel-2-10m-landcover/timeInfo';
+import { AnimationFrameData } from '@vannizhang/images-to-video-converter-client';
+// import { loadImageAsHTMLIMageElement } from '@shared/utils/snippets/loadImage';
+import MapView from '@arcgis/core/views/MapView';
+import {
+    // combineLandcoverImageWithMapScreenshot,
+    combineAnimationFrameImageWithMapScreenshots,
+    getScreenshotOfBasemapLayers,
+} from '@shared/components/AnimationLayer/helpers';
+import {
+    selectLandcoverAnimationYears,
+    selectShouldShowSatelliteImageryLayer,
+    // selectShouldShowSatelliteImageryLayer,
+} from '@shared/store/LandcoverExplorer/selectors';
+// import { loadImageAsHTMLIMageElement } from '@shared/utils/snippets/loadImage';
+import { animationStatusChanged } from '@shared/store/UI/reducer';
+import { WEB_MAP_ID } from '@shared/constants/map';
+
+/**
+ * Represents the properties required by the custom hook `useFrameDataForDownloadJob`.
+ */
+type Props = {
+    /**
+     * An array of ImageElement objects representing media layer elements.
+     */
+    mediaLayerElements: ImageElement[];
+    /**
+     * The animation metadata sources.
+     */
+    animationMetadataSources: string;
+    mapView?: MapView;
+};
+
+/**
+ * This custom hook returns an array of `AnimationFrameData4DownloadJob` objects that
+ * can be used by the Animation Download task.
+ * @param {Props} - The properties required by the hook.
+ * @returns An array of `AnimationFrameData4DownloadJob` objects.
+ */
+export const useFrameDataForDownloadJob = ({
+    mediaLayerElements,
+    mapView,
+    animationMetadataSources,
+}: Props) => {
+    const dispatch = useAppDispatch();
+
+    const mapCenter = useAppSelector(selectMapCenter);
+
+    // const years = getAvailableYears();
+
+    const years = useAppSelector(selectLandcoverAnimationYears);
+
+    // const shouldShowSentinel2Layer = useAppSelector(
+    //     selectShouldShowSatelliteImageryLayer
+    // );
+
+    const [frameData, setFrameData] = useState<AnimationFrameData[]>([]);
+
+    // determine whether to include basemap layers in the screenshot
+    const includeBasemapInScreenshot = useAppSelector(selectShowBasemap);
+
+    // determine whether to include terrain layer in the screenshot
+    const includeTerrainInScreenshot = useAppSelector(selectShowTerrain);
+
+    // determine whether to include map label layers in the screenshot
+    const includeMapLabelsInScreenshot = useAppSelector(selectShowMapLabel);
+
+    const showSatelliteImageryLayer = useAppSelector(
+        selectShouldShowSatelliteImageryLayer
+    );
+
+    useEffect(() => {
+        (async () => {
+            if (!mediaLayerElements?.length) {
+                setFrameData([]);
+                return;
+            }
+
+            try {
+                const {
+                    basemapScreenshot,
+                    referenceLayersScreenshot,
+                    hillshadeScreenshot,
+                } = await getScreenshotOfBasemapLayers({
+                    mapView: mapView,
+                    webmapId: WEB_MAP_ID,
+                    includeBasemapInScreenshot,
+                    includeTerrainInScreenshot,
+                    includeMapLabelsInScreenshot,
+                });
+
+                // load media layer elements as an array of HTML Image Elements
+                const images = await Promise.all(
+                    mediaLayerElements.map((d) => {
+                        return combineAnimationFrameImageWithMapScreenshots(
+                            {
+                                animationFrameImageUrl: d.image as string,
+                                basemapScreenshotData:
+                                    basemapScreenshot?.data || null,
+                                mapLabelScreenshotData:
+                                    referenceLayersScreenshot?.data || null,
+                                hillshadeScreenshotData:
+                                    hillshadeScreenshot?.data || null,
+                                shouldBlendAnimationFrameWithBasemap:
+                                    showSatelliteImageryLayer === false,
+                            }
+                            // d.image as string,
+                            // basemapScreenshot?.data || null,
+                            // referenceLayersScreenshot?.data || null,
+                            // hillshadeScreenshot?.data || null
+                        ); // if showing Landcover layer, the image need to be blended with the screenshot of basemap layers
+                    })
+                );
+
+                const data: AnimationFrameData[] = images.map(
+                    (image, index) => {
+                        return {
+                            image,
+                            imageInfo: `${
+                                years[index]
+                            }  |  x ${mapCenter[0].toFixed(
+                                3
+                            )} y ${mapCenter[1].toFixed(
+                                3
+                            )}  |  ${animationMetadataSources}`,
+                        } as AnimationFrameData;
+                    }
+                );
+
+                setFrameData(data);
+            } catch (error) {
+                console.error('Error loading image elements:', error);
+                dispatch(animationStatusChanged('failed-loading'));
+            }
+        })();
+    }, [mediaLayerElements]);
+
+    return frameData;
+};

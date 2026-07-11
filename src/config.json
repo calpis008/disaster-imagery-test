@@ -1,0 +1,68 @@
+{
+    "landsatexplorer": {
+        "title": "Esri | Landsat Explorer",
+        "description": "Explore and begin to unlock the wealth of information provided by Landsat through an intuitive user experience leveraging a variety of ArcGIS capabilities.",
+        "pathname": "/landsatexplorer",
+        "supportedLocales": ["en"]
+    },
+    "landcoverexplorer": {
+        "title": "Esri | Sentinel-2 Land Cover Explorer",
+        "description": "This application displays the land use/land cover (LULC) timeseries layer derived from ESA Sentinel-2 imagery at 10m resolution.",
+        "pathname": "/landcoverexplorer",
+        "supportedLocales": ["en"]
+    },
+    "sentinel1explorer": {
+        "title": "Esri | Sentinel-1 Explorer",
+        "description": "Explore and begin to unlock the wealth of information provided by Sentinel-1 through an intuitive user experience leveraging a variety of ArcGIS capabilities.",
+        "pathname": "/sentinel1explorer",
+        "supportedLocales": ["en"]
+    },
+    "sentinel2explorer": {
+        "title": "Esri | Sentinel-2 Explorer",
+        "description": "Explore and begin to unlock the wealth of information provided by Sentinel-2 through an intuitive user experience leveraging a variety of ArcGIS capabilities.",
+        "pathname": "/sentinel2explorer",
+        "supportedLocales": ["en", "es"]
+    },
+    "spectralsampler": {
+        "title": "Spectral Sampler",
+        "description": "A streamlined web app for collecting and organizing training data for land cover classification with multispectral satellite imagery. Ideal for researchers, analysts, and students building high-quality reference datasets.",
+        "pathname": "/spectralsampler",
+        "supportedLocales": ["en"]
+    },
+    "surfacetemperature": {
+        "title": "Landsat Surface Temperature",
+        "description": "Explore Landsat surface temperature archive",
+        "pathname": "/surface-temp",
+        "supportedLocales": ["en"]
+    },
+    "nlcdlandcoverexplorer": {
+        "title": "Esri | NLCD Land Cover Explorer",
+        "description": "This app lets you explore and compare annual NLCD Land Cover data, highlighting dynamic changes through visual and statistical insights.",
+        "pathname": "/nlcdlandcoverexplorer",
+        "supportedLocales": ["en"]
+    },
+    "disasterimageryexplorer": {
+        "title": "Esri | Disaster Imagery Explorer",
+        "description": "This app provides timely and accessible imagery to aid first responders in accelerating humanitarian response and recovery.",
+        "pathname": "/disasterimageryexplorer",
+        "supportedLocales": ["en"]
+    },
+    "dmcexplorer": {
+        "title": "DMC III 航攝影像探索",
+        "description": "探索並瀏覽 DMC III 航空攝影影像服務。",
+        "pathname": "/dmcexplorer",
+        "supportedLocales": ["en"]
+    },
+    "fs8explorer": {
+        "title": "福衛八號影像探索",
+        "description": "探索並瀏覽福衛八號（FORMOSAT-8）衛星影像服務。",
+        "pathname": "/fs8explorer",
+        "supportedLocales": ["en"]
+    },
+    "unifiedexplorer": {
+        "title": "航太影像探索",
+        "description": "統一探索 DMC III、福衛八號與 Sentinel-2 衛星及航攝影像。",
+        "pathname": "/unifiedexplorer",
+        "supportedLocales": ["en"]
+    }
+}
