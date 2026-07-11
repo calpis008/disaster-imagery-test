@@ -67,6 +67,33 @@ jobs:
           </html>
           HTMLEOF
 
+      - name: Create Sentinel-2 iframe wrapper page
+        run: |
+          mkdir -p dist/sentinel2explorer
+          cat > dist/sentinel2explorer/index.html << 'HTMLEOF'
+          <!DOCTYPE html>
+          <html lang="zh-TW">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Sentinel-2 Explorer</title>
+            <style>
+              * { margin: 0; padding: 0; box-sizing: border-box; }
+              html, body { width: 100%; height: 100%; overflow: hidden; }
+              iframe { width: 100vw; height: 100vh; border: none; display: block; }
+            </style>
+          </head>
+          <body>
+            <iframe id="s2" allow="geolocation *" title="Sentinel-2 Explorer"></iframe>
+            <script>
+              var base = 'https://livingatlas.arcgis.com/sentinel2explorer/';
+              var hash = window.location.hash || '#mapCenter=121.35975%2C23.69403%2C13.272';
+              document.getElementById('s2').src = base + hash;
+            </script>
+          </body>
+          </html>
+          HTMLEOF
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
