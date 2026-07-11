@@ -70,6 +70,7 @@ jobs:
       - name: Create Sentinel-2 iframe wrapper page
         run: |
           mkdir -p dist/sentinel2explorer
+          cp logo.png dist/sentinel2explorer/logo.png
           cat > dist/sentinel2explorer/index.html << 'HTMLEOF'
           <!DOCTYPE html>
           <html lang="zh-TW">
@@ -98,7 +99,7 @@ jobs:
           <body>
             <div id="header">
               <div id="logo">
-                <div id="logo-text">航測<br>遙測</div>
+                <img src="logo.png" alt="航測及遙測分署">
               </div>
               <div id="agency">
                 <div id="agency-main">農業部林業及自然保育署 航測及遙測分署</div>
