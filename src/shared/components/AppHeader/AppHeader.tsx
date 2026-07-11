@@ -77,9 +77,14 @@ const AppHeader: FC<Props> = ({ showDocButton, docButtonTooltip }) => {
     const zoom = useAppSelector(selectMapZoom);
 
     const launchImageryExplorerApp = (url: string) => {
+        // Compute base path relative to current app directory so navigation
+        // works both on localhost and GitHub Pages subdirectory deployments.
+        // e.g. /ASRS_imagery-explorer-apps/dmcexplorer/ → base = /ASRS_imagery-explorer-apps/
+        const basePath = window.location.pathname.replace(/\/[^/]*\/?$/, '/');
+        const appPath = url.replace(/^\//, '');
         const key: UrlHashParamKey = 'mapCenter';
-        const targetURL = url + `#${key}=${encodeMapCenter(mapCenter, zoom)}`;
-        window.open(targetURL, '_blank');
+        const hash = `#${key}=${encodeMapCenter(mapCenter, zoom)}`;
+        window.location.href = basePath + appPath + '/' + hash;
     };
 
     const imageryExplorerApps = useDataOfImageryExplorerApps();

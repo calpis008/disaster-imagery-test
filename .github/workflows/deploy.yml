@@ -1,4 +1,4 @@
-name: Deploy Unified Explorer to GitHub Pages
+name: Deploy Imagery Explorers to GitHub Pages
 
 on:
   push:
@@ -30,7 +30,8 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
-      - name: Create .env file
+      # ── DMC III + FS8 builds (enterprise portal auth) ──────────────────
+      - name: Create .env for DMC and FS8
         run: |
           {
             echo "DMC_EXPLORER_APP_ID = ${{ secrets.DMC_EXPLORER_APP_ID }}"
@@ -39,14 +40,52 @@ jobs:
             echo "FS8_SERVICE_URL = ${{ secrets.FS8_SERVICE_URL }}"
             echo "ARCGIS_PORTAL_ROOT_URL = ${{ secrets.ARCGIS_PORTAL_ROOT_URL }}"
             echo "SENTINEL2_ORIGINAL_SERVICE_URL = https://sentinel.imagery1.arcgis.com/arcgis/rest/services/Sentinel2L2A/ImageServer"
+            echo "SENTINEL2_EXPLORER_APP_ID = "
+            echo "SENTINEL2_PROXY_SERVICE_URL = "
           } > .env
 
-      - name: Build Unified Explorer
-        run: npm run build:unified
+      - name: Build DMC Explorer
+        run: npm run build:dmc
+
+      - name: Build FS8 Explorer
+        run: npm run build:fs8
+
+      # ── Sentinel-2 build (ArcGIS Online auth, no enterprise portal) ────
+      - name: Create .env for Sentinel-2
+        run: |
+          {
+            echo "SENTINEL2_EXPLORER_APP_ID = ${{ secrets.SENTINEL2_EXPLORER_APP_ID }}"
+            echo "SENTINEL2_PROXY_SERVICE_URL = "
+            echo "SENTINEL2_ORIGINAL_SERVICE_URL = https://sentinel.imagery1.arcgis.com/arcgis/rest/services/Sentinel2L2A/ImageServer"
+            echo "DMC_EXPLORER_APP_ID = "
+            echo "DMC_SERVICE_URL = "
+            echo "FS8_EXPLORER_APP_ID = "
+            echo "FS8_SERVICE_URL = "
+          } > .env
+
+      - name: Build Sentinel-2 Explorer
+        run: npm run build:sentinel2
+
+      # ── Assemble and deploy ─────────────────────────────────────────────
+      - name: Create root redirect page
+        run: |
+          cat > dist/index.html << 'HTMLEOF'
+          <!DOCTYPE html>
+          <html lang="zh-TW">
+          <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="refresh" content="0; url=./dmcexplorer/">
+            <title>航太影像探索</title>
+          </head>
+          <body>
+            正在跳轉至 <a href="./dmcexplorer/">DMC III 航攝影像探索</a>…
+          </body>
+          </html>
+          HTMLEOF
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/unifiedexplorer
+          publish_dir: ./dist
           force_orphan: true

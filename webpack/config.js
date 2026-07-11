@@ -54,11 +54,11 @@ const ENV_VARIABLES_BY_APP_NAME = {
     sentinel2explorer: [
         {
             name: 'SENTINEL2_EXPLORER_APP_ID',
-            required: true,
+            required: false,
         },
         {
             name: 'SENTINEL2_PROXY_SERVICE_URL',
-            required: true,
+            required: false,
         },
     ],
     spectralsampler: [
