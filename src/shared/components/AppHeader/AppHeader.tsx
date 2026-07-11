@@ -42,10 +42,6 @@ import { LocaleSwitcher } from './LocaleSwitcher';
 import { useShouldSuggestLocale } from '@shared/hooks/useSuggestLocale';
 
 type Props = {
-    // /**
-    //  * title of the explorer app
-    //  */
-    // title: string;
     /**
      * if true, show the doc button that allows user to launch the doc panel
      */
@@ -54,9 +50,13 @@ type Props = {
      * tooltip text for the open documentation button
      */
     docButtonTooltip?: string;
+    /**
+     * if true, hide the app-switcher title and dropdown (used when agency header already provides navigation)
+     */
+    hideAppSwitcher?: boolean;
 };
 
-const AppHeader: FC<Props> = ({ showDocButton, docButtonTooltip }) => {
+const AppHeader: FC<Props> = ({ showDocButton, docButtonTooltip, hideAppSwitcher }) => {
     const { t } = useTranslation();
 
     const dispatch = useAppDispatch();
@@ -214,32 +214,30 @@ const AppHeader: FC<Props> = ({ showDocButton, docButtonTooltip }) => {
                 </svg> */}
             </div>
 
-            <div
-                className={classNames(
-                    'relative theme-background p-1 px-2 text-lg font-light items-center h-app-header-size flex-grow md:flex-grow-0'
-                )}
-            >
-                <div className="flex h-full items-center">
-                    <div className="flex-grow">
-                        <span className="text-sm md:text-lg">{title}</span>
-                    </div>
+            {!hideAppSwitcher && (
+                <div
+                    className={classNames(
+                        'relative theme-background p-1 px-2 text-lg font-light items-center h-app-header-size flex-grow md:flex-grow-0'
+                    )}
+                >
+                    <div className="flex h-full items-center">
+                        <div className="flex-grow">
+                            <span className="text-sm md:text-lg">{title}</span>
+                        </div>
 
-                    <div
-                        className="cursor-pointer ml-2 flex items-center"
-                        // onClick={setShowImageryExplorerAppsList.bind(
-                        //     null,
-                        //     !showImageryExplorerAppsList
-                        // )}
-                        onClick={toggleAppLauncherList}
-                    >
-                        {showImageryExplorerAppsList ? (
-                            <calcite-icon icon="chevron-up" />
-                        ) : (
-                            <calcite-icon icon="chevron-down" />
-                        )}
+                        <div
+                            className="cursor-pointer ml-2 flex items-center"
+                            onClick={toggleAppLauncherList}
+                        >
+                            {showImageryExplorerAppsList ? (
+                                <calcite-icon icon="chevron-up" />
+                            ) : (
+                                <calcite-icon icon="chevron-down" />
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             {showDocButton && (
                 <div
@@ -272,7 +270,7 @@ const AppHeader: FC<Props> = ({ showDocButton, docButtonTooltip }) => {
                 </div>
             )}
 
-            {showImageryExplorerAppsList && (
+            {!hideAppSwitcher && showImageryExplorerAppsList && (
                 <div
                     className={classNames(
                         'absolute left-0 md:left-app-header-size top-app-header-size theme-background w-full md:w-[300px] border-t border-custom-light-blue-50'

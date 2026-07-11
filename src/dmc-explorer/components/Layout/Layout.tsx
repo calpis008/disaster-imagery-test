@@ -30,7 +30,7 @@ const Layout = () => {
         return (
             <>
                 <AgencyHeader />
-                <AppHeader />
+                <AppHeader hideAppSwitcher />
                 <BottomPanel>
                     <div className="mx-auto" />
                 </BottomPanel>
