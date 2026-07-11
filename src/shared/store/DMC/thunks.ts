@@ -2,8 +2,6 @@ import { selectMapCenter } from '../Map/selectors';
 import { StoreDispatch, StoreGetState } from '../configureStore';
 import { ImageryScene, availableImageryScenesUpdated } from '../ImageryScene/reducer';
 import { DateRange } from '@typing/shared';
-import { selectQueryParams4SceneInSelectedMode } from '../ImageryScene/selectors';
-import { deduplicateListOfImageryScenes } from '@shared/services/helpers/deduplicateListOfScenes';
 import { getDMCScenes } from '@shared/services/dmc/getDMCScenes';
 import { convertDMCSceneToImageryScene } from '@shared/services/dmc/helpers';
 
@@ -20,8 +18,6 @@ export const queryAvailableDMCScenes =
         abortController = new AbortController();
 
         try {
-            const { objectIdOfSelectedScene } =
-                selectQueryParams4SceneInSelectedMode(getState()) || {};
             const center = selectMapCenter(getState());
 
             const scenes = await getDMCScenes({
@@ -30,8 +26,7 @@ export const queryAvailableDMCScenes =
                 abortController,
             });
 
-            let imageryScenes: ImageryScene[] = scenes.map(convertDMCSceneToImageryScene);
-            imageryScenes = deduplicateListOfImageryScenes(imageryScenes, objectIdOfSelectedScene);
+            const imageryScenes: ImageryScene[] = scenes.map(convertDMCSceneToImageryScene);
             dispatch(availableImageryScenesUpdated(imageryScenes));
         } catch (err) {
             console.error(err);
