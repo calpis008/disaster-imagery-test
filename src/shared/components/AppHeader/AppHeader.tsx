@@ -175,7 +175,7 @@ const AppHeader: FC<Props> = ({ showDocButton, docButtonTooltip }) => {
     return (
         <div
             className={classNames(
-                'absolute z-20 text-custom-light-blue flex top-0 left-0 right-0 md:top-map-ui-top-position md:left-map-ui-top-position md:right-auto',
+                'absolute z-20 text-custom-light-blue flex top-agency-header-size left-0 right-0 md:top-[75px] md:left-map-ui-top-position md:right-auto',
                 {
                     hidden: isAnimationPlaying,
                 }

@@ -116,7 +116,7 @@ const MapViewContainer: FC<Props> = ({
     return (
         <div
             className={classNames(
-                'absolute top-app-header-size md:top-0 left-0 w-full',
+                'absolute top-[100px] md:top-agency-header-size left-0 w-full',
                 'calcite-theme-override',
                 {
                     'bottom-0': shouldHideBottomPanel === true,

@@ -77,6 +77,7 @@ module.exports = {
             spacing: {
                 'bottom-panel-height': '236px',
                 'app-header-size': '40px',
+                'agency-header-size': '60px',
                 'map-ui-top-position': '15px',
                 'map-action-button-group-top-position': '56px',
                 // 'search-widget-top-position': '50px',

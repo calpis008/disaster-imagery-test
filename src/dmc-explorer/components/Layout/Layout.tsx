@@ -2,6 +2,7 @@ import React from 'react';
 import BottomPanel from '@shared/components/BottomPanel/BottomPanel';
 import { Calendar } from '@shared/components/Calendar';
 import { AppHeader } from '@shared/components/AppHeader';
+import AgencyHeader from '@shared/components/AgencyHeader/AgencyHeader';
 import {
     ContainerOfSecondaryControls,
     ModeSelector,
@@ -28,6 +29,7 @@ const Layout = () => {
     if (IS_MOBILE_DEVICE) {
         return (
             <>
+                <AgencyHeader />
                 <AppHeader />
                 <BottomPanel>
                     <div className="mx-auto" />
@@ -38,6 +40,7 @@ const Layout = () => {
 
     return (
         <>
+            <AgencyHeader />
             <AppHeader />
             <BottomPanel>
                 <div className="flex flex-shrink-0">

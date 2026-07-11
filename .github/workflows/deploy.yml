@@ -83,7 +83,7 @@ jobs:
               html,body{width:100%;height:100%;overflow:hidden;font-family:"Microsoft JhengHei","Noto Sans TC","Avenir Next",sans-serif}
               #header{background:#0f1e28;color:#ffffff;height:60px;display:flex;align-items:center;padding:0 16px;gap:12px;border-bottom:2px solid #1e3a4e;flex-shrink:0}
               #logo{width:46px;height:46px;border-radius:50%;border:2px solid #ffffff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
-              #logo img{width:100%;height:100%;object-fit:cover}
+              #logo img{width:100%;height:100%;object-fit:cover;filter:brightness(0) invert(1)}
               #logo-text{font-size:11px;font-weight:bold;text-align:center;line-height:1.3;color:#ffffff}
               #agency{flex-grow:1;min-width:0}
               #agency-main{font-size:16px;font-weight:bold;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#ffffff}
