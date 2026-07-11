@@ -54,7 +54,7 @@ jobs:
       - name: Create .env for Sentinel-2
         run: |
           {
-            echo "SENTINEL2_EXPLORER_APP_ID = ${{ secrets.SENTINEL2_EXPLORER_APP_ID }}"
+            echo "SENTINEL2_EXPLORER_APP_ID = aSCMksIWuDEeRfu7"
             echo "SENTINEL2_PROXY_SERVICE_URL = "
             echo "SENTINEL2_ORIGINAL_SERVICE_URL = https://sentinel.imagery1.arcgis.com/arcgis/rest/services/Sentinel2L2A/ImageServer"
             echo "DMC_EXPLORER_APP_ID = "
