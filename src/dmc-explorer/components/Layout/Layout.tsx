@@ -41,7 +41,7 @@ const Layout = () => {
     return (
         <>
             <AgencyHeader />
-            <AppHeader />
+            <AppHeader hideAppSwitcher />
             <BottomPanel>
                 <div className="flex flex-shrink-0">
                     <ModeSelector />
