@@ -17,7 +17,6 @@ import { useShouldShowSecondaryControls } from '@shared/hooks/useShouldShowSecon
 import { CloudFilter } from '@shared/components/CloudFilter';
 import { useQueryAvailableDMCScenes } from '../../hooks/useQueryAvailableDMCScenes';
 import { SceneInfoContainer } from '../SceneInfo';
-import DMCScenePicker from '../DMCScenePicker/DMCScenePicker';
 
 const Layout = () => {
     const mode = useAppSelector(selectAppMode);
@@ -59,7 +58,6 @@ const Layout = () => {
                     <div className="ml-2 3xl:ml-0">
                         <Calendar>
                             <CloudFilter />
-                            <DMCScenePicker />
                         </Calendar>
                     </div>
 
