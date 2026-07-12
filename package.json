@@ -60,6 +60,7 @@
         "build:dmc": "webpack --mode production --env app=dmcexplorer --env envFileName=.env",
         "start:fs8": "webpack serve --mode development --open --env app=fs8explorer --env envFileName=.env --port 8081",
         "build:fs8": "webpack --mode production --env app=fs8explorer --env envFileName=.env",
+        "start:sentinel2-wrapper": "npx http-server . -p 8082 -c-1 -o /sentinel2-local.html",
         "start:sentinel2": "webpack serve --mode development --open --env app=sentinel2explorer --env envFileName=.env.sentinel2 --port 8082",
         "build:sentinel2": "webpack --mode production --env app=sentinel2explorer --env envFileName=.env.sentinel2",
         "start:unified": "webpack serve --mode development --open --env app=unifiedexplorer --env envFileName=.env",
