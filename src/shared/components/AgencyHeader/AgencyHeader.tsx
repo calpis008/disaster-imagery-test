@@ -35,37 +35,10 @@ const AgencyHeader: FC = () => {
         >
             <img
                 src={logoUrl}
-                alt="林業及自然保育署"
-                style={{ height: '42px', marginRight: '12px', flexShrink: 0 }}
+                alt="農業部林業及自然保育署 航測及遙測分署"
+                style={{ height: '42px', flexShrink: 0 }}
             />
-            <div className="flex-grow min-w-0 mr-4">
-                <div
-                    style={{
-                        fontSize: '15px',
-                        fontWeight: 'bold',
-                        letterSpacing: '1px',
-                        color: '#ffffff',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                    }}
-                >
-                    農業部林業及自然保育署 航測及遙測分署
-                </div>
-                <div
-                    style={{
-                        fontSize: '10px',
-                        color: 'rgba(255,255,255,0.6)',
-                        marginTop: '2px',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                    }}
-                >
-                    Aerial Survey and Remote Sensing Branch, Forestry and
-                    Nature Conservation Agency, MOA
-                </div>
-            </div>
+            <div className="flex-grow" />
 
             <nav style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
                 {apps.map((app) => {
