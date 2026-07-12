@@ -8,7 +8,7 @@ import { MapMagnifier } from '@shared/components/MapMagnifier';
 import { MapActionButtonGroup } from '@shared/components/MapActionButton';
 import { DMC_SERVICE_URL } from '@shared/services/dmc/config';
 import { DMCLayer } from '../DMCLayer';
-import { SwipeComponent4ImageryLayers } from '@shared/components/SwipeWidget/SwipeComponent4ImageryLayers';
+import { DMCSwipeComponent } from '../DMCSwipeComponent/DMCSwipeComponent';
 import { FootPrintOfSelectedScene } from '@shared/components/FootPrintOfSelectedScene';
 
 const Map = () => {
@@ -24,7 +24,7 @@ const Map = () => {
                     animationMetadataSources="DMC III 航攝影像"
                 />
             </GroupLayer>
-            <SwipeComponent4ImageryLayers serviceUrl={DMC_SERVICE_URL} />
+            <DMCSwipeComponent />
             <HillshadeLayer />
             <MapActionButtonGroup
                 nativeScale={4000}
