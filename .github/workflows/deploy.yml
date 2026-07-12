@@ -80,7 +80,8 @@ jobs:
             <style>
               *{margin:0;padding:0;box-sizing:border-box}
               html,body{width:100%;height:100%;overflow:hidden;font-family:"Microsoft JhengHei","Noto Sans TC","Avenir Next",sans-serif}
-              #header{background:#0f1e28;color:#ffffff;height:60px;display:flex;align-items:center;padding:0 16px;gap:16px;border-bottom:2px solid #1e3a4e;flex-shrink:0}
+              #header{background:#0f1e28;color:#ffffff;height:60px;display:flex;align-items:center;padding:0 16px;gap:12px;border-bottom:2px solid #1e3a4e;flex-shrink:0}
+              #logo{height:42px;flex-shrink:0}
               #agency{flex-grow:1;min-width:0}
               #agency-main{font-size:15px;font-weight:bold;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#ffffff}
               #agency-sub{font-size:10px;color:rgba(255,255,255,0.6);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -94,6 +95,7 @@ jobs:
           </head>
           <body>
             <div id="header">
+              <img id="logo" src="../logo.png" alt="林業及自然保育署">
               <div id="agency">
                 <div id="agency-main">農業部林業及自然保育署 航測及遙測分署</div>
                 <div id="agency-sub">Aerial Survey and Remote Sensing Branch, Forestry and Nature Conservation Agency, MOA</div>
@@ -113,6 +115,9 @@ jobs:
           </body>
           </html>
           HTMLEOF
+
+      - name: Copy logo to dist root
+        run: cp public/logo.png dist/logo.png
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { APP_NAME } from '@shared/config';
 import { useDataOfImageryExplorerApps } from '@shared/hooks/useDataOfImageryExplorerApps';
+import logoUrl from '../../../../public/logo.png';
 
 const AgencyHeader: FC = () => {
     const apps = useDataOfImageryExplorerApps();
@@ -32,6 +33,11 @@ const AgencyHeader: FC = () => {
                 flexShrink: 0,
             }}
         >
+            <img
+                src={logoUrl}
+                alt="林業及自然保育署"
+                style={{ height: '42px', marginRight: '12px', flexShrink: 0 }}
+            />
             <div className="flex-grow min-w-0 mr-4">
                 <div
                     style={{
