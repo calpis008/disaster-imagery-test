@@ -25,9 +25,6 @@ const getAppUrl = (appName: AppName, pathname: string): string => {
     return pathname;
 };
 
-const LIVING_ATLAS_SENTINEL2_URL =
-    'https://livingatlas.arcgis.com/sentinel2explorer/';
-
 const isLocalhost =
     typeof window !== 'undefined' &&
     window.location.hostname === 'localhost';
@@ -49,10 +46,8 @@ export const useDataOfImageryExplorerApps = (): ImageryExplorerAppInfo[] => {
         {
             appName: 'sentinel2explorer',
             title: 'Sentinel-2',
-            // Dev: open Living Atlas directly (new tab)
-            // Prod: navigate to local iframe wrapper page (same tab)
             url: isLocalhost
-                ? LIVING_ATLAS_SENTINEL2_URL
+                ? 'http://localhost:8082/sentinel2-local.html'
                 : config.sentinel2explorer.pathname,
             tooltip: 'Sentinel-2 Explorer (Esri Living Atlas)',
         },
