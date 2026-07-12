@@ -85,6 +85,8 @@ export const DMCLayer: FC<Props> = ({ mapView, groupLayer }: Props) => {
         if (mode === 'animate') {
             return !!objectIdOfSelectedScene && animationStatus === null;
         }
+        // swipe mode: SwipeComponent4ImageryLayers manages its own layers
+        if (mode === 'swipe') return false;
         return !!objectIdOfSelectedScene;
     };
 
