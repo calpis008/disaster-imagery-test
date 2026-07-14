@@ -17,6 +17,7 @@ import { useShouldShowSecondaryControls } from '@shared/hooks/useShouldShowSecon
 import { CloudFilter } from '@shared/components/CloudFilter';
 import { useQueryAvailableDMCScenes } from '../../hooks/useQueryAvailableDMCScenes';
 import { SceneInfoContainer } from '../SceneInfo';
+import { DMCDynamicModeInfo } from '../DMCDynamicModeInfo/DMCDynamicModeInfo';
 
 const Layout = () => {
     const mode = useAppSelector(selectAppMode);
@@ -44,7 +45,7 @@ const Layout = () => {
             <AppHeader hideAppSwitcher />
             <BottomPanel>
                 <div className="flex flex-shrink-0">
-                    <ModeSelector />
+                    <ModeSelector modesToHide={['analysis']} />
 
                     {shouldShowSecondaryControls && (
                         <ContainerOfSecondaryControls>
@@ -55,13 +56,19 @@ const Layout = () => {
                 </div>
 
                 <div className="flex flex-grow justify-center shrink-0">
-                    <div className="ml-2 3xl:ml-0">
-                        <Calendar>
-                            <CloudFilter />
-                        </Calendar>
-                    </div>
+                    {mode === 'dynamic' ? (
+                        <DMCDynamicModeInfo />
+                    ) : (
+                        <>
+                            <div className="ml-2 3xl:ml-0">
+                                <Calendar>
+                                    <CloudFilter />
+                                </Calendar>
+                            </div>
 
-                    <SceneInfoContainer />
+                            <SceneInfoContainer />
+                        </>
+                    )}
                 </div>
             </BottomPanel>
         </>

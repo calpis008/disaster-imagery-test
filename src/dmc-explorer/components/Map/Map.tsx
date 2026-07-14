@@ -1,6 +1,6 @@
 import React from 'react';
 import MapViewContainer from '@shared/components/MapView/MapViewContainer';
-import { AnimationLayer } from '@shared/components/AnimationLayer';
+import { DMCAnimationLayer } from '../DMCAnimationLayer/DMCAnimationLayer';
 import { GroupLayer } from '@shared/components/GroupLayer';
 import { MapPopUpAnchorPoint } from '@shared/components/MapPopUpAnchorPoint';
 import { HillshadeLayer } from '@shared/components/HillshadeLayer/HillshadeLayer';
@@ -18,11 +18,7 @@ const Map = () => {
             <GroupLayer index={1}>
                 <DMCLayer />
                 <MapPopUpAnchorPoint />
-                <AnimationLayer
-                    imageryServiceUrl={DMC_SERVICE_URL}
-                    authoringAppName="dmc"
-                    animationMetadataSources="DMC III 航攝影像"
-                />
+                <DMCAnimationLayer />
             </GroupLayer>
             <DMCSwipeComponent />
             <HillshadeLayer />

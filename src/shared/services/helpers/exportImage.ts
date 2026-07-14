@@ -38,9 +38,13 @@ type ExportImageParams = {
      */
     rasterFunctionName: string;
     /**
-     * object Id of the imagery scene
+     * object Id of the imagery scene (single)
      */
-    objectId: number;
+    objectId?: number;
+    /**
+     * object Ids when multiple overlapping scenes should be mosaicked per frame
+     */
+    objectIds?: number[];
     abortController: AbortController;
 };
 
@@ -51,9 +55,12 @@ export const exportImage = async ({
     height,
     rasterFunctionName,
     objectId,
+    objectIds,
     abortController,
 }: ExportImageParams) => {
     const { xmin, xmax, ymin, ymax } = extent;
+
+    const ids = objectIds ?? (objectId != null ? [objectId] : []);
 
     const params = new URLSearchParams({
         f: 'image',
@@ -62,7 +69,7 @@ export const exportImage = async ({
         imageSR: '102100',
         format: 'jpgpng',
         size: `${width},${height}`,
-        mosaicRule: JSON.stringify(getLockRasterMosaicRule([objectId])),
+        mosaicRule: JSON.stringify(getLockRasterMosaicRule(ids)),
         renderingRule: JSON.stringify({ rasterFunction: rasterFunctionName }),
     });
 

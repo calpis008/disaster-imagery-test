@@ -44,7 +44,7 @@ const Layout = () => {
             <AppHeader hideAppSwitcher />
             <BottomPanel>
                 <div className="flex flex-shrink-0">
-                    <ModeSelector />
+                    <ModeSelector modesToHide={['analysis']} />
 
                     {shouldShowSecondaryControls && (
                         <ContainerOfSecondaryControls>

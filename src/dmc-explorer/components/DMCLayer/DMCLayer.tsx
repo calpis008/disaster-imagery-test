@@ -58,8 +58,13 @@ export const DMCLayer: FC<Props> = ({ mapView, groupLayer }: Props) => {
     );
 
     const getMosaicRule = (): MosaicRule => {
-        // find-a-scene: show ALL overlapping scenes for the selected date simultaneously
-        if (mode === 'find a scene' && allObjectIds.length > 0) {
+        // dynamic: always use attribute-based mosaic (same as Sentinel-2 dynamic mode)
+        if (mode === 'dynamic') return defaultMosaicRule;
+        // find-a-scene / animate: show ALL overlapping scenes for the selected date simultaneously
+        if (
+            (mode === 'find a scene' || mode === 'animate') &&
+            allObjectIds.length > 0
+        ) {
             return new MosaicRule({
                 method: 'lock-raster',
                 ascending: true,
@@ -67,7 +72,7 @@ export const DMCLayer: FC<Props> = ({ mapView, groupLayer }: Props) => {
                 lockRasterIds: allObjectIds,
             });
         }
-        // swipe / animate / analysis: lock to the single selected scene
+        // swipe / analysis: lock to the single selected scene
         if (objectIdOfSelectedScene) {
             return new MosaicRule({
                 method: 'lock-raster',
@@ -83,7 +88,7 @@ export const DMCLayer: FC<Props> = ({ mapView, groupLayer }: Props) => {
         if (mode === 'dynamic') return true;
         if (mode === 'find a scene') return allObjectIds.length > 0;
         if (mode === 'animate') {
-            return !!objectIdOfSelectedScene && animationStatus === null;
+            return allObjectIds.length > 0 && animationStatus === null;
         }
         // swipe mode: SwipeComponent4ImageryLayers manages its own layers
         if (mode === 'swipe') return false;

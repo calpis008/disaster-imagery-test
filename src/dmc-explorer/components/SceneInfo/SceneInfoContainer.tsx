@@ -80,7 +80,7 @@ export const SceneInfoContainer = () => {
     if (mode === 'dynamic' || mode === 'analysis') return null;
 
     return (
-        <div className="analyze-tool-and-scene-info-container">
+        <div className="analyze-tool-and-scene-info-container" style={{ width: '320px' }}>
             <div className="text-center mb-3 mt-1">
                 <h4 className="uppercase text-sm">
                     SCENE INFORMATION
