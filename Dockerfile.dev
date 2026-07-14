@@ -1,0 +1,16 @@
+# 開發環境容器（DMC / FS8 / Sentinel-2 wrapper 共用）
+# 與 CI 一致使用 Node 20，避免本機 Node 版本差異造成問題
+FROM node:20-slim
+
+WORKDIR /app
+
+# 先只複製依賴定義檔，讓 npm ci 結果可以被 Docker layer 快取
+COPY package.json package-lock.json ./
+
+# --ignore-scripts：跳過 husky（容器內無 .git），與 CI 行為一致
+RUN npm ci --ignore-scripts
+
+# 原始碼於 docker-compose 以 bind mount 掛入，此處不 COPY
+# node_modules 由上層 layer 提供（compose 以匿名 volume 遮蔽）
+
+EXPOSE 8080 8081 8082

@@ -1,0 +1,56 @@
+# 本機開發環境（Windows / Mac 通用）
+#
+# 前置需求：
+#   1. 安裝 Docker Desktop
+#   2. 專案根目錄放好 .env 檔（不在 git 內，需另行複製）
+#
+# 啟動全部：  docker compose up
+# 只啟動 DMC：docker compose up dmc
+# 停止：      docker compose down
+#
+# 啟動後（webpack 編譯需 1-2 分鐘）：
+#   DMC III     → https://localhost:8080
+#   福衛八號     → https://localhost:8081
+#   Sentinel-2  → http://localhost:8082/sentinel2-local.html
+
+services:
+  dmc:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: npm run start:dmc -- --no-open
+    environment:
+      - WEBPACK_DEV_SERVER_HOSTNAME=0.0.0.0
+    env_file:
+      - .env
+    ports:
+      - '8080:8080'
+    volumes:
+      - .:/app
+      - /app/node_modules   # 遮蔽 host 的 node_modules，使用 image 內建版本
+
+  fs8:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: npm run start:fs8 -- --no-open
+    environment:
+      - WEBPACK_DEV_SERVER_HOSTNAME=0.0.0.0
+    env_file:
+      - .env
+    ports:
+      - '8081:8081'
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  sentinel2-wrapper:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: npx http-server . -p 8082 -c-1
+    ports:
+      - '8082:8082'
+    volumes:
+      - .:/app
+      - /app/node_modules
