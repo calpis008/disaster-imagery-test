@@ -6,7 +6,7 @@ import GroupLayer from '@arcgis/core/layers/GroupLayer';
 import FeatureLayerView from '@arcgis/core/views/layers/FeatureLayerView';
 import MapView from '@arcgis/core/views/MapView';
 import { useChangeCompareLayerVisibility } from '@shared/components/ChangeCompareLayer';
-import { FIELD_NAMES } from '@shared/services/disaster-response/config';
+import { DisasterResponseImageryServiceField } from '@shared/services/disaster-response/config';
 import { getEventFootprints } from '@shared/services/disaster-response/getEventFootprints';
 import { useAppDispatch, useAppSelector } from '@shared/store/configureStore';
 import { objectIdsOfScenesInCurrentMapExtentUpdated } from '@shared/store/DisasterImageryExplorer/reducer';
@@ -96,7 +96,10 @@ export const DisasterResponseFootprintsLayer: FC<Props> = ({
                     spatialReference: mapView?.spatialReference,
                 }),
                 attributes: {
-                    OBJECTID: feature.attributes[FIELD_NAMES.OBJECTID],
+                    OBJECTID:
+                        feature.attributes[
+                            DisasterResponseImageryServiceField.OBJECTID
+                        ],
                 },
             });
         });

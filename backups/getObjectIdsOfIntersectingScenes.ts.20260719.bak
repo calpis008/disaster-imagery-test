@@ -1,6 +1,9 @@
 import type { IFeature } from '@esri/arcgis-rest-feature-service';
 import { getFeatureByObjectId } from '../helpers/getFeatureById';
-import { DISASTER_RESPONSE_IMAGERY_SERVICE_URL, FIELD_NAMES } from './config';
+import {
+    DISASTER_RESPONSE_IMAGERY_SERVICE_URL,
+    DisasterResponseImageryServiceField,
+} from './config';
 
 export const getObjectIdsOfIntersectingScenes = async (
     objectIdOfSceneToIntersectWith: number
@@ -23,15 +26,17 @@ export const getObjectIdsOfIntersectingScenes = async (
     }
 
     const eventName =
-        sceneToIntersectWith?.attributes?.[FIELD_NAMES.EVENT];
+        sceneToIntersectWith?.attributes?.[
+            DisasterResponseImageryServiceField.EVENT
+        ];
 
     const params = new URLSearchParams({
         f: 'json',
         spatialRel: 'esriSpatialRelIntersects',
         geometryType: 'esriGeometryPolygon',
         geometry: JSON.stringify(sceneToIntersectWith.geometry),
-        outFields: FIELD_NAMES.OBJECTID,
-        where: `${FIELD_NAMES.EVENT} = '${eventName}'`,
+        outFields: DisasterResponseImageryServiceField.OBJECTID,
+        where: `${DisasterResponseImageryServiceField.EVENT} = '${eventName}'`,
         returnGeometry: 'false',
     });
 
@@ -55,7 +60,8 @@ export const getObjectIdsOfIntersectingScenes = async (
     }
 
     const intersectingObjectIds: number[] = data.features.map(
-        (feature: IFeature) => feature.attributes[FIELD_NAMES.OBJECTID]
+        (feature: IFeature) =>
+            feature.attributes[DisasterResponseImageryServiceField.OBJECTID]
     );
 
     return intersectingObjectIds;

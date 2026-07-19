@@ -1,5 +1,8 @@
 import { IFeature } from '@esri/arcgis-rest-feature-service';
-import { DISASTER_RESPONSE_IMAGERY_SERVICE_URL, FIELD_NAMES } from './config';
+import {
+    DISASTER_RESPONSE_IMAGERY_SERVICE_URL,
+    DisasterResponseImageryServiceField,
+} from './config';
 
 const cache = new Map<string, IFeature[]>();
 
@@ -17,17 +20,19 @@ export const getEventFootprints = async (
         return cache.get(eventId)!;
     }
 
-    const whereClauses = [`${FIELD_NAMES.EVENT}='${eventId}'`];
+    const whereClauses = [
+        `${DisasterResponseImageryServiceField.EVENT}='${eventId}'`,
+    ];
 
     if (objectids && objectids.length > 0) {
         whereClauses.push(
-            `${FIELD_NAMES.OBJECTID} IN (${objectids.join(',')})`
+            `${DisasterResponseImageryServiceField.OBJECTID} IN (${objectids.join(',')})`
         );
     }
 
     const params = new URLSearchParams({
         where: whereClauses.join(' AND '),
-        outFields: FIELD_NAMES.OBJECTID,
+        outFields: DisasterResponseImageryServiceField.OBJECTID,
         returnGeometry: 'true',
         f: 'json',
     });

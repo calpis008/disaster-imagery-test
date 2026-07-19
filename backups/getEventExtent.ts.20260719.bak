@@ -1,5 +1,8 @@
 import { IExtent } from '@esri/arcgis-rest-feature-service';
-import { DISASTER_RESPONSE_IMAGERY_SERVICE_URL, FIELD_NAMES } from './config';
+import {
+    DISASTER_RESPONSE_IMAGERY_SERVICE_URL,
+    DisasterResponseImageryServiceField,
+} from './config';
 
 /**
  * This function queries the disaster response imagery service for the extent of a given event, and returns the extent in the format of IExtent.
@@ -13,7 +16,7 @@ export const getEventExtent = async ({
     eventName: string;
 }): Promise<IExtent> => {
     const params = new URLSearchParams({
-        where: `${FIELD_NAMES.EVENT}='${eventName}'`,
+        where: `${DisasterResponseImageryServiceField.EVENT}='${eventName}'`,
         returnExtentOnly: 'true',
         f: 'json',
     });

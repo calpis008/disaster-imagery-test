@@ -26,10 +26,7 @@ import { PartialRootState } from '@shared/store/configureStore';
 import { getPreloadedState4UI } from '@shared/store/UI/getPreloadedState';
 import { getPreloadedState4Map } from '@shared/store/Map/getPreloadedState';
 import { getPreloadedState4ImageryScenes } from '@shared/store/ImageryScene/getPreloadedState';
-import {
-    DisasterResponseImageryServiceDefaultRenderer,
-    DisasterResponseRasterFunctionName,
-} from '@shared/services/disaster-response/config';
+import { DisasterResponseRasterFunctionName } from '@shared/services/disaster-response/config';
 import { getPreloadedState4DisasterImageryExplorer } from '@shared/store/DisasterImageryExplorer/getPreloadedState';
 import { DisasterResponseEvent } from '@shared/store/DisasterImageryExplorer/reducer';
 import {
@@ -127,11 +124,8 @@ const getSwipeSubMode = (
 const getStateForImageryScenes = (
     hashParams: URLSearchParams
 ): ImageryScenesState => {
-    // ASRS 的 DMC III 服務沒有具名 raster function（實測只有服務端預設的 'None'），
-    // 因此改用 config.ts 集中定義的預設值（空字串＝不帶 renderingRule），不要在這裡寫死
-    // 原 Esri drp_imagery 服務專用、ASRS 服務並不存在的 RFT 名稱。
     const defaultRasterFunction: DisasterResponseRasterFunctionName =
-        DisasterResponseImageryServiceDefaultRenderer;
+        'Natural Color for Visualization - DRA';
 
     const preloadedState4ImageryScenes = getPreloadedState4ImageryScenes(
         hashParams,

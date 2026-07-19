@@ -1,10 +1,12 @@
 import { DisasterResponseScene } from '@typing/imagery-service';
-import { DISASTER_RESPONSE_IMAGERY_SERVICE_URL, FIELD_NAMES } from './config';
+import {
+    DISASTER_RESPONSE_IMAGERY_SERVICE_URL,
+    DisasterResponseImageryServiceField,
+} from './config';
 import { IFeature } from '@esri/arcgis-rest-feature-service';
 import { getFormatedDateString } from '@shared/utils/date-time/formatDateString';
 import { getFeatureByObjectId } from '../helpers/getFeatureById';
 import { getTimeStrInUTCTimeZone } from '@shared/utils/date-time/formatInUTCTimeZone';
-import { getEventStartDate } from './getEventStartDates';
 
 const disasterResponseSceneByObjectId = new Map<
     number,
@@ -13,17 +15,8 @@ const disasterResponseSceneByObjectId = new Map<
 
 const cachedScenesByEventName = new Map<string, DisasterResponseScene[]>();
 
-/**
- * Formats raw features from the Disaster Response imagery service into `DisasterResponseScene`s.
- *
- * @param features raw features returned by the imagery service query
- * @param eventStartDate the derived start date (unix timestamp in ms, min ImageDate of the event) for the
- * event these features belong to, or null if unknown. This is a single value shared by all features passed in,
- * since ASRS's service does not carry a per-row event_start_date field (see getEventStartDates.ts).
- */
 export const getFormattedDisasterResponseScenes = (
-    features: IFeature[],
-    eventStartDate: number | null = null
+    features: IFeature[]
 ): DisasterResponseScene[] => {
     if (!features || features.length === 0) {
         return [];
@@ -35,18 +28,37 @@ export const getFormattedDisasterResponseScenes = (
         const { attributes } = feature;
 
         const eventTimestamp =
-            attributes[FIELD_NAMES.DATETIME] != null &&
-            Number.isFinite(+attributes[FIELD_NAMES.DATETIME])
-                ? +attributes[FIELD_NAMES.DATETIME]
+            attributes[DisasterResponseImageryServiceField.DATETIME] != null &&
+            Number.isFinite(
+                +attributes[DisasterResponseImageryServiceField.DATETIME]
+            )
+                ? +attributes[DisasterResponseImageryServiceField.DATETIME]
                 : null;
 
-        return eventTimestamp !== null;
+        const eventStartDate =
+            attributes[DisasterResponseImageryServiceField.EVENT_START_DATE] !=
+                null &&
+            Number.isFinite(
+                +attributes[
+                    DisasterResponseImageryServiceField.EVENT_START_DATE
+                ]
+            )
+                ? +attributes[
+                      DisasterResponseImageryServiceField.EVENT_START_DATE
+                  ]
+                : null;
+
+        return eventTimestamp !== null && eventStartDate !== null;
     });
 
     for (const feature of featuresCleaned) {
         const { attributes } = feature;
 
-        const eventTimestamp = +attributes[FIELD_NAMES.DATETIME];
+        const eventTimestamp =
+            +attributes[DisasterResponseImageryServiceField.DATETIME];
+
+        const eventStartDate =
+            +attributes[DisasterResponseImageryServiceField.EVENT_START_DATE];
 
         /**
          * formatted aquisition date should be like `2023-05-01`
@@ -64,44 +76,40 @@ export const getFormattedDisasterResponseScenes = (
             true
         );
 
+        const validImageTypes = ['pre-event', 'post-event'];
+
+        const imageType = validImageTypes.includes(
+            attributes[DisasterResponseImageryServiceField.IMAGE_TYPE]
+        )
+            ? attributes[DisasterResponseImageryServiceField.IMAGE_TYPE]
+            : 'unknown';
+
         // 24 hours in milliseconds
         const millisecondsPerDay = 1000 * 60 * 60 * 24;
 
-        const daysFromEventStart =
-            eventStartDate != null
-                ? Math.floor(
-                      (eventTimestamp - eventStartDate) / millisecondsPerDay
-                  )
-                : null;
-
-        // ASRS's `ImageType` field describes the sensor/product (e.g. 'DMCIII'), not whether the
-        // scene was captured before or after the disaster event, so pre/post-event classification is
-        // derived here by comparing the scene's acquisition timestamp against the event start date
-        // derived in getEventStartDates.ts (min ImageDate of the event). Since the start date is the
-        // minimum acquisition date within the event's own scenes, no scene can be strictly earlier than
-        // it — 'pre-event' scenes will only occur if a future data source provides an independently
-        // sourced (e.g. pre-disaster baseline) start date.
-        const imageType: DisasterResponseScene['imageType'] =
-            eventStartDate == null
-                ? 'unknown'
-                : eventTimestamp < eventStartDate
-                  ? 'pre-event'
-                  : 'post-event';
+        const daysFromEventStart = Math.floor(
+            (eventTimestamp - eventStartDate) / millisecondsPerDay
+        );
 
         const scene: DisasterResponseScene = {
-            objectId: attributes[FIELD_NAMES.OBJECTID],
-            // ASRS 服務沒有獨立的 provider/platform 欄位
-            provider: '',
-            event: attributes[FIELD_NAMES.EVENT],
-            // ASRS 服務沒有獨立的 title/description 欄位，以影像名稱（Name）做為顯示標題
-            title: attributes[FIELD_NAMES.NAME],
-            description: '',
-            platform: '',
+            objectId: attributes[DisasterResponseImageryServiceField.OBJECTID],
+            provider: attributes[DisasterResponseImageryServiceField.PROVIDER],
+            event: attributes[DisasterResponseImageryServiceField.EVENT],
+            title: attributes[DisasterResponseImageryServiceField.TITLE],
+            description:
+                attributes[DisasterResponseImageryServiceField.DESCRIPTION] ||
+                '',
+            platform: attributes[DisasterResponseImageryServiceField.PLATFORM],
             imageType,
-            eventStartDate,
-            eventTimestamp: attributes[FIELD_NAMES.DATETIME],
-            cloudCover: attributes[FIELD_NAMES.CLOUDS_PERCENT],
-            name: attributes[FIELD_NAMES.NAME],
+            eventStartDate:
+                attributes[
+                    DisasterResponseImageryServiceField.EVENT_START_DATE
+                ],
+            eventTimestamp:
+                attributes[DisasterResponseImageryServiceField.DATETIME],
+            cloudCover:
+                attributes[DisasterResponseImageryServiceField.CLOUDS_PERCENT],
+            name: attributes[DisasterResponseImageryServiceField.NAME],
             formattedAcquisitionDate,
             acquisitionDate: eventTimestamp,
             acquisitionYear,
@@ -131,14 +139,15 @@ export const getDisasterResponseScenes = async ({
         return cachedScenesByEventName.get(eventName);
     }
 
-    // ASRS 沒有 event_start_date 欄位，起始日以 min(ImageDate) 推導（見 getEventStartDates.ts）
-    const eventStartDate = await getEventStartDate(eventName);
-
     const whereClauses = [
-        `(${FIELD_NAMES.CATEGORY} = 1)`,
-        `(${FIELD_NAMES.EVENT} = '${eventName}')`,
-        `(${FIELD_NAMES.DATETIME} IS NOT NULL)`,
+        `(${DisasterResponseImageryServiceField.CATEGORY} = 1)`,
     ];
+
+    whereClauses.push(
+        `(${DisasterResponseImageryServiceField.EVENT} = '${eventName}')`,
+        `(${DisasterResponseImageryServiceField.EVENT_START_DATE} IS NOT NULL)`,
+        `(${DisasterResponseImageryServiceField.DATETIME} IS NOT NULL)`
+    );
 
     const params = new URLSearchParams({
         f: 'json',
@@ -147,13 +156,19 @@ export const getDisasterResponseScenes = async ({
         geometryType: 'esriGeometryPoint',
         // inSR: '102100',
         outFields: [
-            FIELD_NAMES.OBJECTID,
-            FIELD_NAMES.EVENT,
-            FIELD_NAMES.DATETIME,
-            FIELD_NAMES.CLOUDS_PERCENT,
-            FIELD_NAMES.NAME,
+            DisasterResponseImageryServiceField.OBJECTID,
+            DisasterResponseImageryServiceField.PROVIDER,
+            DisasterResponseImageryServiceField.EVENT,
+            DisasterResponseImageryServiceField.TITLE,
+            // DisasterResponseImageryServiceField.DESCRIPTION,
+            DisasterResponseImageryServiceField.PLATFORM,
+            DisasterResponseImageryServiceField.IMAGE_TYPE,
+            DisasterResponseImageryServiceField.EVENT_START_DATE,
+            DisasterResponseImageryServiceField.DATETIME,
+            DisasterResponseImageryServiceField.CLOUDS_PERCENT,
+            DisasterResponseImageryServiceField.NAME,
         ].join(','),
-        orderByFields: FIELD_NAMES.DATETIME,
+        orderByFields: DisasterResponseImageryServiceField.DATETIME,
         sortOrder: 'ASC',
         resultOffset: '0',
         returnGeometry: 'false',
@@ -184,8 +199,7 @@ export const getDisasterResponseScenes = async ({
     }
 
     const scenes: DisasterResponseScene[] = getFormattedDisasterResponseScenes(
-        data?.features || [],
-        eventStartDate
+        data?.features || []
     );
 
     if (!scenes || !scenes.length) {
@@ -224,12 +238,7 @@ export const getDisasterResponseSceneByObjectId = async (
         return null;
     }
 
-    const eventName = feature.attributes?.[FIELD_NAMES.EVENT];
-    const eventStartDate = await getEventStartDate(eventName);
-
-    const scene =
-        getFormattedDisasterResponseScenes([feature], eventStartDate)[0] ??
-        null;
+    const scene = getFormattedDisasterResponseScenes([feature])[0] ?? null;
 
     if (scene) {
         disasterResponseSceneByObjectId.set(objectId, scene);
