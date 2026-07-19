@@ -74,7 +74,8 @@ export const Map = () => {
 
             <HillshadeLayer />
 
-            {/* 內政部國土測繪中心「臺灣通用電子地圖透明」（EMAP2），常駐疊在最上層作為道路地名參照 */}
+            {/* 內政部國土測繪中心「臺灣通用電子地圖透明」（EMAP2），疊在最上層作為道路地名參照，
+                顯示與否由右上角 Map Labels checkbox（showMapLabel）控制 */}
             <NLSCEmapReferenceLayer />
 
             <MapActionButtonGroup

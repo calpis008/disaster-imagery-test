@@ -20,7 +20,7 @@ import IMapView from '@arcgis/core/views/MapView';
 import { useAppSelector } from '@shared/store/configureStore';
 import {
     selectShowBasemap,
-    // selectShowMapLabel, // Map Labels checkbox 改由 NLSCEmapReferenceLayer.tsx 使用
+    selectShowMapLabel,
     // selectShowTerrain,
 } from '@shared/store/Map/selectors';
 
@@ -105,10 +105,7 @@ const ReferenceLayers: FC<Props> = ({ mapView }: Props) => {
 
     const basemapLayersRef = useRef<Collection<Layer>>(null);
 
-    // 「Map Labels」checkbox（showMapLabel）改為控制 NLSC「臺灣通用電子地圖透明」
-    // （EMAP2）參照層（見 NLSCEmapReferenceLayer.tsx），Esri 底圖的 HUMAN_GEO_* 標籤層
-    // 改為永久隱藏，避免勾選時兩層標籤重疊。
-    // const showMapLabel = useAppSelector(selectShowMapLabel);
+    const showMapLabel = useAppSelector(selectShowMapLabel);
     // const showTerrain = useAppSelector(selectShowTerrain);
 
     const showBasemap = useAppSelector(selectShowBasemap);
@@ -119,8 +116,7 @@ const ReferenceLayers: FC<Props> = ({ mapView }: Props) => {
         }
 
         for (const layer of mapLabelLayersRef.current) {
-            // Esri 標籤層永久隱藏，不再受 Map Labels checkbox 控制
-            layer.visible = false;
+            layer.visible = showMapLabel;
         }
     };
 
@@ -154,7 +150,7 @@ const ReferenceLayers: FC<Props> = ({ mapView }: Props) => {
         //     }
         // );
 
-        // Esri 標籤層一律隱藏（Map Labels checkbox 已改為控制 NLSC EMAP2 參照層）
+        // update visibiliy in case user want these layers to be turned off by default
         updateLabelLayersVisibility();
 
         updateBaseLayersVisibility();
@@ -170,8 +166,9 @@ const ReferenceLayers: FC<Props> = ({ mapView }: Props) => {
         }
     }, [mapView]);
 
-    // showMapLabel 的變化改由 NLSCEmapReferenceLayer.tsx 監聽（控制 EMAP2 顯示/隱藏），
-    // Esri 標籤層已於 init() 永久隱藏，這裡不再需要監聽。
+    useEffect(() => {
+        updateLabelLayersVisibility();
+    }, [showMapLabel]);
 
     useEffect(() => {
         updateBaseLayersVisibility();

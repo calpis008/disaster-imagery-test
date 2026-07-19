@@ -22,8 +22,6 @@ import {
     NLSC_EMAP_LAYER_TITLE,
     NLSC_EMAP_ATTRIBUTION,
 } from '@shared/services/nlsc/config';
-import { useAppSelector } from '@shared/store/configureStore';
-import { selectShowMapLabel } from '@shared/store/Map/selectors';
 
 type Props = {
     mapView?: MapView;
@@ -32,30 +30,22 @@ type Props = {
 /**
  * 建立內政部國土測繪中心（NLSC）「臺灣通用電子地圖透明」（EMAP2）WebTileLayer。
  *
- * 此圖層背景透明，疊在災害航攝影像圖層之上做為道路／地名參照層。
- * 顯示與否由右上角「Map Labels」checkbox（Map store 的 showMapLabel 狀態）控制，
- * 取代原本 Esri 底圖 HUMAN_GEO_* 標籤層的角色（該組標籤層已改為永久隱藏，
- * 見 ReferenceLayers.tsx，避免兩層標籤重疊）。
- *
- * @param visible 是否顯示此圖層（對應 Map Labels checkbox 狀態）
+ * 此圖層背景透明，疊在災害航攝影像圖層之上做為道路／地名參照層，因此不提供顯示/隱藏
+ * 開關（常駐顯示），與 HillshadeLayer 等其他參考圖層元件同樣採「index.ts + 元件」慣例。
  */
-export const getNLSCEmapLayer = (visible: boolean) => {
+export const getNLSCEmapLayer = () => {
     return new WebTileLayer({
         title: NLSC_EMAP_LAYER_TITLE,
         urlTemplate: NLSC_EMAP_TILE_URL_TEMPLATE,
         copyright: NLSC_EMAP_ATTRIBUTION,
-        visible,
     });
 };
 
 export const NLSCEmapReferenceLayer: FC<Props> = ({ mapView }) => {
     const emapLayerRef = useRef<WebTileLayer>(null);
 
-    // 綁定右上角「Map Labels」checkbox 的 redux 狀態：勾選＝顯示 EMAP2、取消＝隱藏
-    const showMapLabel = useAppSelector(selectShowMapLabel);
-
     const init = () => {
-        emapLayerRef.current = getNLSCEmapLayer(showMapLabel);
+        emapLayerRef.current = getNLSCEmapLayer();
 
         // 不指定 index：add() 預設加到圖層堆疊最上層，
         // 確保透明電子地圖疊在災害影像／地形量影圖層之上作為道路地名參照。
@@ -75,12 +65,6 @@ export const NLSCEmapReferenceLayer: FC<Props> = ({ mapView }) => {
             }
         };
     }, [mapView]);
-
-    useEffect(() => {
-        if (emapLayerRef.current) {
-            emapLayerRef.current.visible = showMapLabel;
-        }
-    }, [showMapLabel]);
 
     return null;
 };
