@@ -16,12 +16,10 @@
 import {
     showMapLabelToggled,
     showBasemapToggled,
-    showTerrainToggled,
 } from '@shared/store/Map/reducer';
 import {
     selectShowMapLabel,
     selectShowBasemap,
-    selectShowTerrain,
 } from '@shared/store/Map/selectors';
 // import { selectAnimationStatus } from '@shared/store/UI/selectors';
 import classNames from 'classnames';
@@ -31,17 +29,14 @@ import { useAppSelector } from '@shared/store/configureStore';
 import { useTranslation } from 'react-i18next';
 import { is3DOnToggled } from '@shared/store/Scene3D/reducer';
 import {
-    selectDemForSelectedEvent,
+    selectIs3DAvailable,
     selectIs3DOn,
-    selectIsDetectingDem,
 } from '@shared/store/Scene3D/selectors';
-import { selectSelectedEventName } from '@shared/store/DisasterImageryExplorer/selectors';
 
 type ToggleButtonProps = {
     label: string;
     active: boolean;
     disabled?: boolean;
-    title?: string;
     onToggle: () => void;
 };
 
@@ -79,7 +74,6 @@ const ToggleButton: FC<ToggleButtonProps> = ({
     label,
     active,
     disabled,
-    title,
     onToggle,
 }: ToggleButtonProps) => {
     return (
@@ -88,7 +82,6 @@ const ToggleButton: FC<ToggleButtonProps> = ({
                 'mx-2 my-1 md:my-0 z-10 flex items-center',
                 disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
             )}
-            title={title}
             onClick={disabled ? undefined : onToggle}
         >
             {active ? CheckIcon : UncheckIcon}
@@ -108,54 +101,27 @@ export const ReferenceLayersToggleControl: FC = () => {
 
     const showBasemap = useAppSelector(selectShowBasemap);
 
-    const showTerrain = useAppSelector(selectShowTerrain);
-
     const is3DOn = useAppSelector(selectIs3DOn);
 
-    const selectedEventName = useAppSelector(selectSelectedEventName);
-
-    const demForSelectedEvent = useAppSelector(selectDemForSelectedEvent);
-
-    const isDetectingDem = useAppSelector(selectIsDetectingDem);
+    const is3DAvailable = useAppSelector(selectIs3DAvailable);
 
     const { t } = useTranslation();
 
-    // 3D 開啟時，EMAP2（3857 圖磚）進不了 3826 local scene，Map Labels/Terrain checkbox 隱藏，
-    // 不動 ReferenceLayers.tsx/NLSCEmapReferenceLayer.tsx/HillshadeLayer.tsx 內部邏輯
+    // 3D 開啟時，EMAP2（3857 圖磚）進不了 3826 local scene，Map Labels checkbox 隱藏，
+    // 不動 ReferenceLayers.tsx/NLSCEmapReferenceLayer.tsx 內部邏輯
     const shouldHideMapLabelToggle = is3DOn;
 
-    const shouldHideTerrainToggle = is3DOn;
-
-    // 3D 鈕改為常駐顯示，依狀態 disabled，避免使用者誤以為功能不存在：
-    // 未選事件 → 提示先選事件；已選事件但無相交 DEM → 提示此事件無 DEM；偵測中 → disabled。
-    let is3DDisabled = true;
-    let button3DTitle: string | undefined;
-
-    if (!selectedEventName) {
-        is3DDisabled = true;
-        button3DTitle = '請先選擇災害事件';
-    } else if (isDetectingDem) {
-        is3DDisabled = true;
-        button3DTitle = undefined;
-    } else if (!demForSelectedEvent) {
-        is3DDisabled = true;
-        button3DTitle = '此事件無對應 DEM 服務';
-    } else {
-        is3DDisabled = false;
-        button3DTitle = undefined;
-    }
-
-    const button3D = (
+    // 3D 鈕只在「已選事件且探測到相交 DEM」時才顯示；偵測中或無相交 DEM（該事件無 3D）一律不顯示，
+    // 不採用 disabled+tooltip 的替代做法，避免使用者對無 3D 覆蓋的事件誤按。
+    const button3D = is3DAvailable ? (
         <ToggleButton
             label={t('scene_3d', { ns: 'common', defaultValue: '3D' })}
             active={is3DOn}
-            disabled={is3DDisabled}
-            title={button3DTitle}
             onToggle={() => {
                 dispatch(is3DOnToggled());
             }}
         />
-    );
+    ) : null;
 
     return (
         <div
@@ -181,22 +147,11 @@ export const ReferenceLayersToggleControl: FC = () => {
                 />
             )}
 
-            {!shouldHideTerrainToggle && (
-                <ToggleButton
-                    label={t('terrain')}
-                    active={showTerrain}
-                    onToggle={() => {
-                        // console.log('toggle Terrain');
-                        dispatch(showTerrainToggled());
-                    }}
-                />
-            )}
-
             <ToggleButton
                 label={t('basemap')}
                 active={showBasemap}
                 onToggle={() => {
-                    // console.log('toggle basemap');
+                    // console.log('toggle Terrain');
                     dispatch(showBasemapToggled());
                 }}
             />
