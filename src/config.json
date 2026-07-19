@@ -1,0 +1,8 @@
+{
+    "disasterimageryexplorer": {
+        "title": "Esri | Disaster Imagery Explorer",
+        "description": "This app provides timely and accessible imagery to aid first responders in accelerating humanitarian response and recovery.",
+        "pathname": "/disasterimageryexplorer",
+        "supportedLocales": ["en"]
+    }
+}

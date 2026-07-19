@@ -1,0 +1,25 @@
+# 本地測試用 docker compose 設定（生產化 nginx 靜態站台）
+#
+# 說明：本檔取代舊版「多 app 開發用」docker-compose.yml（原本啟動 DMC/FS8/
+# Sentinel-2 三組 dev server，對應 npm run start:dmc / start:fs8 等 script，
+# 但本專案已精簡為僅建置 disasterimageryexplorer 單一 app，該等 script
+# 已不存在於 package.json，故舊檔已失效，原始內容備份於
+# backups/docker-compose.yml.2026-07-19.bak）。開發模式請改用 `npm start`
+# （見 package.json，啟動 https://localhost:8080 的 webpack dev server）；
+# 本檔案對應的是「建置 + nginx 服務」的生產部署驗證流程。
+#
+# 用法：docker compose up --build，瀏覽 http://localhost:8080
+services:
+  web:
+    build:
+      context: .
+      # 建置期變數；需要覆寫時在此填值或改用 --build-arg
+      args:
+        DISASTER_IMAGERY_EXPLORER_APP_ID: ''
+        DISASTER_RESPONSE_SERVICE_URL: ''
+        ARCGIS_PORTAL_ROOT_URL: ''
+        IMAGERY_EXPLORER_WEB_MAP_ID: ''
+    image: asrs-disaster-explorer:local
+    ports:
+      - '8080:80'
+    restart: unless-stopped

@@ -1,0 +1,10 @@
+node_modules
+dist
+.git
+.cache
+*.log
+# 本機真實 .env 不應進入 build context；Dockerfile 會用 ARG 產生自己的 .env
+.env
+.env.development
+.env.production
+.env.test

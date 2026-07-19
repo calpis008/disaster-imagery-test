@@ -1,0 +1,357 @@
+/* Copyright 2025 Esri
+ *
+ * Licensed under the Apache License Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * A raster function information for the image services, including the name, description, help, function type,
+ * and a thumbnail of preconfigured raster function templates.
+ */
+export type RasterFunctionInfo = {
+    /**
+     * name of the raster function (e.g. `Agriculture with DRA`)
+     */
+    name: string;
+    /**
+     * description of raster function (e.g. `Bands shortwave IR-1, near-IR, blue (6, 5, 2) with dynamic range adjustment applied...`)
+     */
+    description: string;
+    /**
+     * label of the raster function that will be displayed in UI
+     */
+    label?: string;
+    /**
+     * URL of the thumbnail image
+     */
+    thumbnail?: string;
+    /**
+     * URL of the legend image
+     */
+    legend?: string;
+};
+
+/**
+ * Spectral indices are combinations of the pixel values from two or more spectral bands in a multispectral image.
+ * Spectral indices are designed to highlight pixels showing the relative abundance or lack of a land-cover type of interest in an image.
+ */
+export type SpectralIndex =
+    | 'water'
+    | 'vegetation'
+    | 'moisture'
+    | 'temperature farhenheit'
+    | 'temperature celcius'
+    | 'urban'
+    | 'burn';
+
+/**
+ * Name of Radar Index for SAR image (e.g. Sentinel-1)
+ */
+export type RadarIndex = 'water' | 'water anomaly' | 'ship' | 'urban';
+// | 'vegetation'
+
+export type LandsatScene = {
+    objectId: number;
+    /**
+     * Landsat product name
+     * @example LC08_L1GT_029030_20151209_20160131_01_RT
+     */
+    name: string;
+    /**
+     * acquisitionDate as a string in ISO format (YYYY-MM-DD).
+     */
+    formattedAcquisitionDate: string;
+    /**
+     * acquisitionDate in unix timestamp
+     */
+    acquisitionDate: number;
+    /**
+     * year when this scene was acquired
+     */
+    acquisitionYear: number;
+    /**
+     * month when this scene was acquired
+     */
+    acquisitionMonth: number;
+    /**
+     * percent of cloud cover, the value ranges from 0 - 1
+     */
+    cloudCover: number;
+    /**
+     * percent of cloud cover ranges rounded to integers that ranges from 0 - 100
+     */
+    formattedCloudCover: number;
+    // /**
+    //  * if true, this scene was acquired during a cloudy day
+    //  */
+    // isCloudy: boolean;
+    /**
+     * name of the satellite (e.g. 'Landsat 8')
+     */
+    satellite: string;
+    /**
+     * Landsat path number
+     * @see https://landsat.gsfc.nasa.gov/about/the-worldwide-reference-system/
+     */
+    path: number;
+    /**
+     * Landsat Row number
+     */
+    row: number;
+    /**
+     * name of the sensor:
+     * - OLI/TIRS combined
+     * - OLI-only
+     * - TIRS-only
+     * - ETM+
+     * - MSS
+     */
+    sensor: string;
+    // /**
+    //  * Collection category:
+    //  * - Real-Time
+    //  * - Tier 1
+    //  * - Tier 2
+    //  */
+    // collectionCategory: string;
+    // /**
+    //  * Collection number (01, 02, …)
+    //  */
+    // collectionNumber: string;
+    /**
+     * Processing correction level (L1TP/L1GT/L1GS)
+     */
+    correctionLevel: string;
+    /**
+     * processing date in unix timestamp
+     */
+    processingDate: number;
+    // category: number;
+    // name: string;
+    // best: number;
+    sunElevation: number;
+    sunAzimuth: number;
+};
+
+export type Sentinel2Scene = {
+    objectId: number;
+    /**
+     * Sentinel-2 product name
+     * @example Ov_i05_L02_R00000016_C00000004
+     */
+    name: string;
+    /**
+     * acquisitionDate as a string in ISO format (YYYY-MM-DD).
+     */
+    formattedAcquisitionDate: string;
+    /**
+     * acquisitionDate in unix timestamp
+     */
+    acquisitionDate: number;
+    /**
+     * year when this scene was acquired
+     */
+    acquisitionYear: number;
+    /**
+     * month when this scene was acquired
+     */
+    acquisitionMonth: number;
+    /**
+     * percent of cloud cover, the value ranges from 0 - 1
+     */
+    cloudCover: number;
+    /**
+     * percent of cloud cover ranges rounded to integers that ranges from 0 - 100
+     */
+    formattedCloudCover: number;
+    /**
+     * name of the satellite (e.g. 'Sentinel-2C')
+     */
+    satellite: string;
+    /**
+     * name of the sensor (e.g. 'MSI')
+     */
+    sensor: string;
+    /**
+     * percentage of snow and ice cover, the value ranges from 0 - 100
+     */
+    snowIcePercentage: number;
+    /**
+     * name of the product, e.g. 'S2MSI2A'
+     */
+    productName: string;
+    /**
+     * relative orbit number of the scene
+     */
+    relativeOrbit: string;
+    /**
+     * elevation of the sun in degrees:
+     * 90 - MeanSolarZenith
+     */
+    sunElevation: string;
+    /**
+     * azimuth of the sun in degrees:
+     */
+    sunAzimuth: string;
+    /**
+     * percentage of no data pixels in the scene, the value ranges from 0 - 100
+     */
+    noDataPixelPercentage: number;
+};
+
+/**
+ * Temporal Profile/Trend Data sampled at user selected location
+ */
+export type TemporalProfileData = {
+    /**
+     * object id of imagery scene gets sampled
+     */
+    objectId: number;
+    /**
+     * acquisitionDate of imagery scene in unix timestamp
+     */
+    acquisitionDate: number;
+    /**
+     * acquisitionDate as a string in ISO format (YYYY-MM-DD).
+     */
+    formattedAcquisitionDate: string;
+    /**
+     * acquisition year of imagery scene
+     */
+    acquisitionYear: number;
+    /**
+     * acquisition month of imagery scene
+     */
+    acquisitionMonth: number;
+    /**
+     * sampled values for each band
+     */
+    values: number[];
+};
+
+type ImageryServiceTimeExtentData = {
+    start: number;
+    end: number;
+};
+
+export type Sentinel1OrbitDirection = 'Ascending' | 'Descending';
+
+export type Sentinel1Scene = {
+    objectId: number;
+    /**
+     * product name
+     * @example S1A_IW_GRDH_1SDV_20141003T040550_20141003T040619_002660_002F64_EC04
+     */
+    name: string;
+    /**
+     * name of the sensor
+     */
+    sensor: string;
+    /**
+     * orbit direction of the sentinel-1 imagery scene
+     */
+    orbitDirection: Sentinel1OrbitDirection;
+    /**
+     * single polarisation (HH or VV) or dual polarisation (HH+HV or VV+VH)
+     */
+    polarizationType: string;
+
+    absoluteOrbit: string;
+
+    relativeOrbit: string;
+    /**
+     * acquisitionDate as a string in ISO format (YYYY-MM-DD).
+     */
+    formattedAcquisitionDate: string;
+    /**
+     * acquisitionDate in unix timestamp
+     */
+    acquisitionDate: number;
+    /**
+     * year when this scene was acquired
+     */
+    acquisitionYear: number;
+    /**
+     * month when this scene was acquired
+     */
+    acquisitionMonth: number;
+};
+
+/**
+ * A disaster response imagery scene that is defined in the disaster response imagery service.
+ */
+export type DisasterResponseScene = {
+    objectId: number;
+    /**
+     * Name of the disaster response event that this scene belongs to, e.g. 'Cyclone-Ditwah-Sri-Lanka-Nov-2025', etc.
+     */
+    event: string;
+    /**
+     * Timestamp of when the event scene was acquired in unix timestamp.
+     */
+    eventTimestamp: number;
+    /**
+     * Timestamp of when the event started in unix timestamp.
+     */
+    eventStartDate: number;
+    /**
+     * Title of the disaster response scene that can be used in the UI
+     */
+    title: string;
+    /**
+     * Description of the disaster response scene that can be used in the UI to provide more information about the scene, such as the damage condition, etc.
+     */
+    description: string;
+    /**
+     * Name of the imagery scene: CycloneDitwahSriLankaNov2025_103001010C477F00_20250117``
+     */
+    name: string;
+    /**
+     * Provider of the imagery scene, e.g. 'Vantor'
+     */
+    provider: string;
+    /**
+     * Percent of cloud cover, the value ranges from 0 - 100
+     */
+    cloudCover: number;
+    /**
+     * Formatted acquisition date in string format like `2025-01-17` that can be used for display in the UI. The formatted acquisition date is derived from the `eventTimestamp` field.
+     */
+    formattedAcquisitionDate: string;
+    /**
+     * Acquisition date in unix timestamp, which is the same as the `eventTimestamp` field.
+     * We keep both fields because some UI components require acquisition date in unix timestamp for date comparison and formatting, while some other UI components require acquisition date in formatted string for display.
+     */
+    acquisitionDate: number;
+    /**
+     * Year when this scene was acquired, derived from the `eventTimestamp` field.
+     */
+    acquisitionYear: number;
+    /**
+     * Month when this scene was acquired, derived from the `eventTimestamp` field.
+     */
+    acquisitionMonth: number;
+    /**
+     * A formatted acquisition time string in the format of `HH:mm:ss` that can be used for display in the UI.
+     * The formatted acquisition time is derived from the `eventTimestamp` field.
+     */
+    formattedAcuisitionTime: string;
+    /**
+     * Image type of the scene, e.g. 'pre-event' or 'post-event', etc. This field is used to indicate whether the scene was captured before or after the disaster event, which can help users quickly identify the imagery they are interested in when they are exploring the disaster response scenes.
+     */
+    imageType: 'pre-event' | 'post-event' | 'unknown';
+    /**
+     * Number of days between the acquisition date of the scene and the event start date. Negative value means the scene was acquired before the event start date, positive value means the scene was acquired after the event start date, and zero means the scene was acquired on the same day as the event starts.
+     */
+    daysFromEventStart: number;
+    platform: string;
+};
