@@ -179,20 +179,6 @@ const getGlobalConstants = (app, envConfig) => {
         ENV_FS8_SERVICE_URL: JSON.stringify(
             envConfig.FS8_SERVICE_URL
         ),
-        /**
-         * 內政部國土測繪中心（NLSC）WMTS 服務根網址。
-         * Optional: 預設 https://wmts.nlsc.gov.tw/wmts。
-         */
-        ENV_NLSC_WMTS_BASE_URL: JSON.stringify(
-            envConfig.NLSC_WMTS_BASE_URL
-        ),
-        /**
-         * NLSC「臺灣通用電子地圖透明」圖層 identifier。
-         * Optional: 預設 EMAP2。
-         */
-        ENV_NLSC_EMAP_LAYER_ID: JSON.stringify(
-            envConfig.NLSC_EMAP_LAYER_ID
-        ),
     };
 };
 

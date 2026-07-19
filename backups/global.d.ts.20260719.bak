@@ -151,15 +151,3 @@ declare const ENV_FS8_EXPLORER_APP_ID: string;
  * The service URL for FORMOSAT-8 ImageServer.
  */
 declare const ENV_FS8_SERVICE_URL: string;
-
-/**
- * 內政部國土測繪中心（NLSC）WMTS 服務根網址。
- * Optional: 預設 https://wmts.nlsc.gov.tw/wmts。
- */
-declare const ENV_NLSC_WMTS_BASE_URL: string;
-
-/**
- * NLSC「臺灣通用電子地圖透明」圖層 identifier。
- * Optional: 預設 EMAP2。
- */
-declare const ENV_NLSC_EMAP_LAYER_ID: string;

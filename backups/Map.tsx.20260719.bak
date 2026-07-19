@@ -21,7 +21,6 @@ import { GroupLayer } from '@shared/components/GroupLayer';
 // import { Popup } from '../PopUp';
 import { MapPopUpAnchorPoint } from '@shared/components/MapPopUpAnchorPoint';
 import { HillshadeLayer } from '@shared/components/HillshadeLayer/HillshadeLayer';
-import { NLSCEmapReferenceLayer } from '@shared/components/NLSCEmapReferenceLayer';
 import CustomMapArrtribution from '@shared/components/CustomMapArrtribution/CustomMapArrtribution';
 import { useAppDispatch } from '@shared/store/configureStore';
 import { useTranslation } from 'react-i18next';
@@ -73,9 +72,6 @@ export const Map = () => {
             />
 
             <HillshadeLayer />
-
-            {/* 內政部國土測繪中心「臺灣通用電子地圖透明」（EMAP2），常駐疊在最上層作為道路地名參照 */}
-            <NLSCEmapReferenceLayer />
 
             <MapActionButtonGroup
                 nativeScale={1937}

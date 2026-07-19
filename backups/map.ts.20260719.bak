@@ -31,20 +31,13 @@ export const WEB_MAP_ID = ENV_WEB_MAP_ID || DEFAULT_WEB_MAP_ID;
 
 /**
  * Default Map Center
- *
- * ASRS（農業部林業及自然保育署航測及遙測分署）緊急災害影像服務對外服務對象在台灣，
- * 預設地圖中心改為台灣本島中心點（無 URL hash `mapCenter` 參數時才會使用此值，
- * hash 參數優先序見 getPreloadedState4Map.ts）。
- * 2026-07-19：座標與 zoom 依台灣本島全圖置中需求核定。
  */
-export const MAP_CENTER = [120.9605, 23.6978];
+export const MAP_CENTER = [5, 20]; //[-117.18, 34.055];
 
 /**
  * Default Map Zoom
- *
- * zoom 8 可讓台灣本島在初始畫面中剛好置中顯示。
  */
-export const MAP_ZOOM = 8;
+export const MAP_ZOOM = 3;
 
 export const HUMAN_GEO_DARK_LABEL_LAYER_TITLE = 'Human Geography Dark Label';
 
