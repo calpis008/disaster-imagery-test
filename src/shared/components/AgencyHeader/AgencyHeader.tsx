@@ -40,35 +40,38 @@ const AgencyHeader: FC = () => {
             />
             <div className="flex-grow" />
 
-            <nav style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
-                {apps.map((app) => {
-                    const isActive = app.appName === APP_NAME;
-                    return (
-                        <button
-                            key={app.appName}
-                            onClick={() => {
-                                if (!isActive) navigate(app.url);
-                            }}
-                            style={{
-                                padding: '6px 14px',
-                                color: '#ffffff',
-                                background: isActive
-                                    ? 'rgba(255,255,255,0.2)'
-                                    : 'transparent',
-                                fontWeight: isActive ? 'bold' : 'normal',
-                                fontSize: '13px',
-                                borderRadius: '3px',
-                                cursor: isActive ? 'default' : 'pointer',
-                                border: 'none',
-                                whiteSpace: 'nowrap',
-                            }}
-                            title={app.tooltip}
-                        >
-                            {app.title}
-                        </button>
-                    );
-                })}
-            </nav>
+            {/* app 清單為空（如災害影像探索器單一應用）時不渲染 nav，避免多餘空間 */}
+            {apps.length > 0 && (
+                <nav style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
+                    {apps.map((app) => {
+                        const isActive = app.appName === APP_NAME;
+                        return (
+                            <button
+                                key={app.appName}
+                                onClick={() => {
+                                    if (!isActive) navigate(app.url);
+                                }}
+                                style={{
+                                    padding: '6px 14px',
+                                    color: '#ffffff',
+                                    background: isActive
+                                        ? 'rgba(255,255,255,0.2)'
+                                        : 'transparent',
+                                    fontWeight: isActive ? 'bold' : 'normal',
+                                    fontSize: '13px',
+                                    borderRadius: '3px',
+                                    cursor: isActive ? 'default' : 'pointer',
+                                    border: 'none',
+                                    whiteSpace: 'nowrap',
+                                }}
+                                title={app.tooltip}
+                            >
+                                {app.title}
+                            </button>
+                        );
+                    })}
+                </nav>
+            )}
         </div>
     );
 };

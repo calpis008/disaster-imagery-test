@@ -16,7 +16,6 @@
 import React from 'react';
 import BottomPanel from '@shared/components/BottomPanel/BottomPanel';
 import { AppHeader } from '@shared/components/AppHeader';
-import AgencyHeader from '@shared/components/AgencyHeader/AgencyHeader';
 import {
     ContainerOfSecondaryControls,
     ModeSelector,
@@ -86,8 +85,7 @@ export const AppLayout = () => {
     if (IS_MOBILE_DEVICE) {
         return (
             <>
-                <AgencyHeader />
-                <AppHeader hideAppSwitcher />
+                <AppHeader />
                 <BottomPanel>
                     <div className="mx-2 w-full">
                         <EventSceneSelector4Mobile />
@@ -99,8 +97,7 @@ export const AppLayout = () => {
 
     return (
         <>
-            <AgencyHeader />
-            <AppHeader hideAppSwitcher />
+            <AppHeader />
             <BottomPanel>
                 <div
                     className={classNames('flex flex-shrink-0', {
