@@ -21,7 +21,6 @@ import ChangeCompareTool from './ChangeCompareTool/reducer';
 import TemporalCompositeTool from './TemporalCompositeTool/reducer';
 import ImageryService from './ImageryService/reducer';
 import DisasterImageryExplorer from './DisasterImageryExplorer/reducer';
-import Scene3D from './Scene3D/reducer';
 
 const reducers = combineReducers({
     Map,
@@ -31,7 +30,6 @@ const reducers = combineReducers({
     ChangeCompareTool,
     TemporalCompositeTool,
     DisasterImageryExplorer,
-    Scene3D,
 });
 
 export default reducers;

@@ -51,9 +51,6 @@ import classNames from 'classnames';
 import { useSyncPaginationWithScene } from '../../hooks/useSyncPaginationWithScene';
 import { useTranslation } from 'react-i18next';
 import { APP_NAME } from '@shared/config';
-import { useDetectDemForSelectedEvent } from '../../hooks/useDetectDemForSelectedEvent';
-import { selectIs3DOn } from '@shared/store/Scene3D/selectors';
-import { AppMode } from '@shared/store/ImageryScene/reducer';
 
 export const AppLayout = () => {
     const { t } = useTranslation();
@@ -68,18 +65,10 @@ export const AppLayout = () => {
 
     const selectedEvent = useAppSelector(selectSelectedEventName);
 
-    const is3DOn = useAppSelector(selectIs3DOn);
-
     /**
      * Query the available Disaster Response scenes when the selected event changes
      */
     useQueryAvailableDisasterResponseScenes();
-
-    /**
-     * Detects whether the selected event has a matching DEM (3D terrain) service, so the
-     * "3D" toggle in ReferenceLayersToggleControl knows whether to show/enable itself.
-     */
-    useDetectDemForSelectedEvent();
 
     useSaveAppState2HashParams();
 
@@ -124,10 +113,6 @@ export const AppLayout = () => {
                         modesToHide={[
                             'dynamic', // hide 'dynamic' mode as it is not applicable for Disaster Imagery Explorer. Hidding  'dynamic' mode will cause the sub modes under 'explore' mode (i.e. 'dynamic' and 'find a scene') to be hidden in the Mode Selector, as they are not applicable for Disaster Imagery Explorer, which only has one explore mode.
                             'animate', // hide 'animate' mode as animation is not applicable for Disaster Imagery Explorer
-                            // 'swipe' and 'analysis' are 2D-only tools (Swipe widget / Change &
-                            // Temporal Composite layers): hide them while the 3D SceneView is
-                            // active rather than touching their internal logic.
-                            ...(is3DOn ? (['swipe', 'analysis'] as AppMode[]) : []),
                         ]}
                     />
 

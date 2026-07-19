@@ -163,16 +163,3 @@ declare const ENV_NLSC_WMTS_BASE_URL: string;
  * Optional: 預設 EMAP2。
  */
 declare const ENV_NLSC_EMAP_LAYER_ID: string;
-
-/**
- * 分署 DEM 高程快取服務目錄的根網址（GeoServer REST catalog，`?f=json` 可匿名列舉）。
- * 用於 3D 視角切換功能自動偵測事件對應的 DEM。
- * Optional: 預設 https://gisportal.moa.gov.tw/geoserver/rest/services?f=json。
- */
-declare const ENV_DEM_CATALOG_URL: string;
-
-/**
- * DEM 服務命名前綴，用於從目錄中篩選出 DEM 服務（例如 `DEM_260708_tif`）。
- * Optional: 預設 DEM_。
- */
-declare const ENV_DEM_SERVICE_PREFIX: string;

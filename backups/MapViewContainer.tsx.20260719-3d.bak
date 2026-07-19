@@ -61,7 +61,6 @@ import { MapCenterIndicator } from './MapCenterIndicator';
 import { autoSwipeStatusChanged } from '@shared/store/Map/reducer';
 import { WEB_MAP_ID } from '@shared/constants/map';
 import { AnimationStartButtonOnMapContainer } from '../AnimationStartButtonOnMap/AnimationStartButtonOnMapContainer';
-import { Scene3DView } from '../Scene3DView';
 
 type Props = {
     hideMapCenterIndicator?: boolean;
@@ -201,11 +200,6 @@ const MapViewContainer: FC<Props> = ({
 
                 {/* <ZoomWidget /> */}
             </MapView>
-
-            {/* 3D 視角切換：疊在 2D MapView 之上的獨立 SceneView 容器（事件 DEM 地形 + 航攝影像），
-                2D MapView 保留在下層不銷毀。只在 Scene3D store 有 is3DOn 且找到對應 DEM 時才會
-                建立/顯示，其餘 app（非 Disaster Imagery Explorer）不會用到，渲染為空。 */}
-            <Scene3DView />
 
             <ReferenceLayersControl shoudHide={isAnimationPlaying} />
 

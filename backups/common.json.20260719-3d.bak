@@ -70,7 +70,6 @@
     "basemap": "Basemap",
     "terrain": "Terrain",
     "map_labels": "Map Labels",
-    "scene_3d": "3D",
     "zoom_to_extent": "Zoom to Extent",
     "loading": "Loading",
     "yearly": "Yearly",

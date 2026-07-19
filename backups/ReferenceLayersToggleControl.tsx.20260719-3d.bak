@@ -15,10 +15,12 @@
 
 import {
     showMapLabelToggled,
+    showTerrainToggled,
     showBasemapToggled,
 } from '@shared/store/Map/reducer';
 import {
     selectShowMapLabel,
+    selectShowTerrain,
     selectShowBasemap,
 } from '@shared/store/Map/selectors';
 // import { selectAnimationStatus } from '@shared/store/UI/selectors';
@@ -27,16 +29,10 @@ import React, { FC } from 'react';
 import { useAppDispatch } from '@shared/store/configureStore';
 import { useAppSelector } from '@shared/store/configureStore';
 import { useTranslation } from 'react-i18next';
-import { is3DOnToggled } from '@shared/store/Scene3D/reducer';
-import {
-    selectIs3DAvailable,
-    selectIs3DOn,
-} from '@shared/store/Scene3D/selectors';
 
 type ToggleButtonProps = {
     label: string;
     active: boolean;
-    disabled?: boolean;
     onToggle: () => void;
 };
 
@@ -73,16 +69,12 @@ const UncheckIcon = (
 const ToggleButton: FC<ToggleButtonProps> = ({
     label,
     active,
-    disabled,
     onToggle,
 }: ToggleButtonProps) => {
     return (
         <div
-            className={classNames(
-                'mx-2 my-1 md:my-0 z-10 flex items-center',
-                disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
-            )}
-            onClick={disabled ? undefined : onToggle}
+            className="mx-2 my-1 md:my-0 cursor-pointer z-10 flex items-center"
+            onClick={onToggle}
         >
             {active ? CheckIcon : UncheckIcon}
             <span className="ml-1">{label}</span>
@@ -99,29 +91,11 @@ export const ReferenceLayersToggleControl: FC = () => {
 
     const showMapLabel = useAppSelector(selectShowMapLabel);
 
+    const showTerrain = useAppSelector(selectShowTerrain);
+
     const showBasemap = useAppSelector(selectShowBasemap);
 
-    const is3DOn = useAppSelector(selectIs3DOn);
-
-    const is3DAvailable = useAppSelector(selectIs3DAvailable);
-
     const { t } = useTranslation();
-
-    // 3D 開啟時，EMAP2（3857 圖磚）進不了 3826 local scene，Map Labels checkbox 隱藏，
-    // 不動 ReferenceLayers.tsx/NLSCEmapReferenceLayer.tsx 內部邏輯
-    const shouldHideMapLabelToggle = is3DOn;
-
-    // 3D 鈕只在「已選事件且探測到相交 DEM」時才顯示；偵測中或無相交 DEM（該事件無 3D）一律不顯示，
-    // 不採用 disabled+tooltip 的替代做法，避免使用者對無 3D 覆蓋的事件誤按。
-    const button3D = is3DAvailable ? (
-        <ToggleButton
-            label={t('scene_3d', { ns: 'common', defaultValue: '3D' })}
-            active={is3DOn}
-            onToggle={() => {
-                dispatch(is3DOnToggled());
-            }}
-        />
-    ) : null;
 
     return (
         <div
@@ -136,16 +110,23 @@ export const ReferenceLayersToggleControl: FC = () => {
             // }}
             className="md:flex relative py-2 theme-background"
         >
-            {!shouldHideMapLabelToggle && (
-                <ToggleButton
-                    label={t('map_labels')}
-                    active={showMapLabel}
-                    onToggle={() => {
-                        // console.log('toggle map labels');
-                        dispatch(showMapLabelToggled());
-                    }}
-                />
-            )}
+            <ToggleButton
+                label={t('map_labels')}
+                active={showMapLabel}
+                onToggle={() => {
+                    // console.log('toggle map labels');
+                    dispatch(showMapLabelToggled());
+                }}
+            />
+
+            <ToggleButton
+                label={t('terrain')}
+                active={showTerrain}
+                onToggle={() => {
+                    // console.log('toggle Terrain');
+                    dispatch(showTerrainToggled());
+                }}
+            />
 
             <ToggleButton
                 label={t('basemap')}
@@ -155,8 +136,6 @@ export const ReferenceLayersToggleControl: FC = () => {
                     dispatch(showBasemapToggled());
                 }}
             />
-
-            {button3D}
         </div>
     );
 };

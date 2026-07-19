@@ -193,18 +193,6 @@ const getGlobalConstants = (app, envConfig) => {
         ENV_NLSC_EMAP_LAYER_ID: JSON.stringify(
             envConfig.NLSC_EMAP_LAYER_ID
         ),
-        /**
-         * 分署 DEM 高程快取服務目錄根網址（3D 視角切換功能的 DEM 自動偵測用）。
-         * Optional: 預設 https://gisportal.moa.gov.tw/geoserver/rest/services?f=json。
-         */
-        ENV_DEM_CATALOG_URL: JSON.stringify(envConfig.DEM_CATALOG_URL),
-        /**
-         * DEM 服務命名前綴。
-         * Optional: 預設 DEM_。
-         */
-        ENV_DEM_SERVICE_PREFIX: JSON.stringify(
-            envConfig.DEM_SERVICE_PREFIX
-        ),
     };
 };
 
