@@ -1,0 +1,68 @@
+name: Deploy Disaster Imagery Explorer to GitHub Pages
+
+on:
+  push:
+    branches:
+      - asrs-disaster-explorer
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      HUSKY: 0
+      NODE_OPTIONS: --max-old-space-size=4096
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Create .env
+        run: |
+          {
+            echo "DISASTER_IMAGERY_EXPLORER_APP_ID ="
+            echo "DISASTER_RESPONSE_SERVICE_URL = https://edi.asrs.gov.tw/geoportal/sharing/servers/473e7b17fd4b4a3ebf37d27ad6afc9b9/rest/services/edi/DIMS_DMCIII_8_3/ImageServer"
+            echo "ARCGIS_PORTAL_ROOT_URL = https://edi.asrs.gov.tw/geoportal"
+            echo "IMAGERY_EXPLORER_WEB_MAP_ID ="
+            echo "NLSC_WMTS_BASE_URL ="
+            echo "NLSC_EMAP_LAYER_ID ="
+          } > .env
+
+      - name: Build
+        run: npm run build
+
+      - name: Create root redirect page
+        run: |
+          cat > dist/index.html << 'HTMLEOF'
+          <!DOCTYPE html>
+          <html lang="zh-TW">
+          <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="refresh" content="0; url=./disasterimageryexplorer/">
+            <title>緊急災害航攝影像服務</title>
+          </head>
+          <body>
+            正在跳轉至 <a href="./disasterimageryexplorer/">緊急災害航攝影像服務</a>…
+          </body>
+          </html>
+          HTMLEOF
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          force_orphan: true
