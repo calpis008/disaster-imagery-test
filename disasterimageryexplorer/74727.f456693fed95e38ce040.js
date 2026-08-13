@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkasrs_disaster_explorer=self.webpackChunkasrs_disaster_explorer||[]).push([[74727],{74727:function(e,r,s){s.d(r,{PieChartAm5:function(){return n.r},PieSeriesAm5:function(){return t.w}});var n=s(34726),t=s(1765)}}]);
